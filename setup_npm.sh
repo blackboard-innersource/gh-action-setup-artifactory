@@ -12,23 +12,29 @@ require_env() {
   require_var "$2" "Missing env var '$1'"
 }
 
+encode() {
+  local flag
+  local os
+  os=$(uname | tr '[:upper:]' '[:lower:]')
+  flag=""
+  if [ "$os" == "linux" ]; then
+    flag=" --wrap=0"
+  fi
+
+  echo "$1" | base64"$flag"
+}
+
 setup_npm() {
   if [ "$ARTIFACTORY_SETUP_NPM" == "false" ]; then
     echo "Skipping pip setup because ARTIFACTORY_SETUP_NPM=$ARTIFACTORY_SETUP_NPM"
     return 0
   fi
 
-  npmCmd=""
-  if command -v npm &> /dev/null; then
-    npmCmd="npm"
-  fi
-
-  require_var "$npmCmd" "Cannot find npm executable" || return 1
-
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
   require_env "ARTIFACTORY_NPM_REGISTRY" "$ARTIFACTORY_NPM_REGISTRY" || return 1
 
+  local key
   key=${ARTIFACTORY_NPM_REGISTRY#"https://"}
 
   cat > "$HOME/.npmrc" << EOF
