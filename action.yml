@@ -1,0 +1,7 @@
+name: Setup Artifactory
+description: Setup package managers to pull packages from Artifactory
+runs:
+  using: "composite"
+  steps:
+    - run: ${{ github.action_path }}/entry.sh
+      shell: bash

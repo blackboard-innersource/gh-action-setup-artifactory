@@ -1,0 +1,73 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Unit tests
+        run: make
+
+  action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run action
+        uses: ./
+        env:
+          ARTIFACTORY_USERNAME: test_username
+          ARTIFACTORY_TOKEN: test_token
+          ARTIFACTORY_PYPI_INDEX: https://example.com/test_pypi_index
+          ARTIFACTORY_NPM_REGISTRY: https://example.com/test_npm_registry
+
+      - name: Test .netrc exists
+        run: test -f ~/.netrc && cat ~/.netrc
+
+      - name: Test pip.conf exists
+        run: test -f ~/.config/pip/pip.conf && cat ~/.config/pip/pip.conf
+
+      - name: Test .npmrc exists
+        run: test -f ~/.npmrc && cat ~/.npmrc
+
+#  cd:
+#    needs: [test, action]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#
+#      - name: Version
+#        id: version
+#        uses: blackboard-innersource/gh-action-version-cat@v1
+#
+#      - name: Create Release ${{ steps.version.outputs.version }}
+#        if: github.event_name == 'push'
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ steps.version.outputs.version }}
+#          release_name: ${{ steps.version.outputs.version }}
+#
+#      - name: Checkout ${{ steps.version.outputs.version }}
+#        if: github.event_name == 'push'
+#        uses: actions/checkout@v2
+#        with:
+#          ref: ${{ steps.version.outputs.version }}
+#          fetch-depth: 0
+#
+#      - name: Tag and Push v${{ steps.version.outputs.major }}
+#        if: github.event_name == 'push'
+#        run: |
+#          git tag -f v${{ steps.version.outputs.major }}
+#          git push -f origin v${{ steps.version.outputs.major }}
