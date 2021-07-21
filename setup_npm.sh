@@ -13,15 +13,13 @@ require_env() {
 }
 
 encode() {
-  local flag
   local os
   os=$(uname | tr '[:upper:]' '[:lower:]')
-  flag=""
   if [ "$os" == "linux" ]; then
-    flag=" --wrap=0"
+    echo "$1" | base64 --wrap=0
+  else
+    echo "$1" | base64
   fi
-
-  echo "$1" | base64"$flag"
 }
 
 setup_npm() {
@@ -39,7 +37,7 @@ setup_npm() {
 
   cat > "$HOME/.npmrc" << EOF
 registry=$ARTIFACTORY_NPM_REGISTRY
-//$key:_password=$(echo "$ARTIFACTORY_TOKEN" | base64)
+//$key:_password=$(encode "$ARTIFACTORY_TOKEN")
 //$key:username=$ARTIFACTORY_USERNAME
 //$key:always-auth=true
 
