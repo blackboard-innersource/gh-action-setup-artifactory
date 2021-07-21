@@ -38,6 +38,7 @@ jobs:
 
       - name: Test .npmrc exists
         run: test -f ~/.npmrc && cat ~/.npmrc
+      - run: man base64
 
 #  cd:
 #    needs: [test, action]
