@@ -16,7 +16,7 @@ encode() {
   local os
   os=$(uname | tr '[:upper:]' '[:lower:]')
   if [ "$os" == "linux" ]; then
-    echo "$1" | base64 --wrap=0
+    echo "$1" | base64
   else
     echo "$1" | base64
   fi
