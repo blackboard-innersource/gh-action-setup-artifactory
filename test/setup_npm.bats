@@ -19,7 +19,6 @@ function teardown {
 # shellcheck disable=SC2034
 @test "setup_npm can configure npm" {
   HOME="$TMPDIR"
-  XDG_CONFIG_HOME="$TMPDIR"
   ARTIFACTORY_USERNAME="test_username"
   ARTIFACTORY_TOKEN="test_token"
   ARTIFACTORY_NPM_REGISTRY="https://example.com/test_registry/"
@@ -42,7 +41,6 @@ EOF
 # shellcheck disable=SC2034
 @test "setup_npm can be disabled" {
   HOME="$TMPDIR"
-  XDG_CONFIG_HOME="$TMPDIR"
   ARTIFACTORY_SETUP_NPM="false"
 
   run setup_npm
@@ -54,7 +52,6 @@ EOF
 # shellcheck disable=SC2034
 @test "setup_npm fails when missing env var" {
   HOME="$TMPDIR"
-  XDG_CONFIG_HOME="$TMPDIR"
 
   run setup_npm
   assert_failure
