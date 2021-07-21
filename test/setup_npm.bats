@@ -31,8 +31,9 @@ function teardown {
   assert_success
   assert_output - <<EOF
 registry=https://example.com/test_registry/
-_auth = dGVzdF90b2tlbgo=
-always-auth = true
+//example.com/test_registry/:_password=dGVzdF90b2tlbgo=
+//example.com/test_registry/:username=test_username
+//example.com/test_registry/:always-auth=true
 EOF
 
 }
@@ -55,6 +56,6 @@ EOF
   run setup_npm
   assert_failure
   assert [ ! -f "$TMPDIR/.npmrc" ]
-  assert_output "Missing env var 'ARTIFACTORY_TOKEN'"
+  assert_output "Missing env var 'ARTIFACTORY_USERNAME'"
 }
 
