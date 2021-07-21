@@ -25,17 +25,13 @@ setup_npm() {
 
   require_var "$npmCmd" "Cannot find npm executable" || return 1
 
-  require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
   require_env "ARTIFACTORY_NPM_REGISTRY" "$ARTIFACTORY_NPM_REGISTRY" || return 1
 
-  key=${ARTIFACTORY_NPM_REGISTRY#"https://"}
-
   cat > "$HOME/.npmrc" << EOF
 registry=$ARTIFACTORY_NPM_REGISTRY
-//$key:_password=$(echo "$ARTIFACTORY_TOKEN" | base64)
-//$key:username=$ARTIFACTORY_USERNAME
-//$key:always-auth=true
+_auth = $(echo "$ARTIFACTORY_TOKEN" | base64)
+always-auth = true
 
 EOF
 
