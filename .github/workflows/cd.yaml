@@ -13,11 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - run: |
-          echo $HOME
-          echo $XDG_CONFIG_HOME
-          env
-
       - name: Unit tests
         run: make
 
