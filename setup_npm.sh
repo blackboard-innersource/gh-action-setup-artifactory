@@ -12,28 +12,33 @@ require_env() {
   require_var "$2" "Missing env var '$1'"
 }
 
+# Linux base64 wraps while macOS does not
+encode() {
+  local os
+  os=$(uname | tr '[:upper:]' '[:lower:]')
+  if [ "$os" == "linux" ]; then
+    echo "$1" | base64 --wrap=0
+  else
+    echo "$1" | base64
+  fi
+}
+
 setup_npm() {
   if [ "$ARTIFACTORY_SETUP_NPM" == "false" ]; then
     echo "Skipping pip setup because ARTIFACTORY_SETUP_NPM=$ARTIFACTORY_SETUP_NPM"
     return 0
   fi
 
-  npmCmd=""
-  if command -v npm &> /dev/null; then
-    npmCmd="npm"
-  fi
-
-  require_var "$npmCmd" "Cannot find npm executable" || return 1
-
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
   require_env "ARTIFACTORY_NPM_REGISTRY" "$ARTIFACTORY_NPM_REGISTRY" || return 1
 
+  local key
   key=${ARTIFACTORY_NPM_REGISTRY#"https://"}
 
   cat > "$HOME/.npmrc" << EOF
 registry=$ARTIFACTORY_NPM_REGISTRY
-//$key:_password=$(echo "$ARTIFACTORY_TOKEN" | base64)
+//$key:_password=$(encode "$ARTIFACTORY_TOKEN")
 //$key:username=$ARTIFACTORY_USERNAME
 //$key:always-auth=true
 
