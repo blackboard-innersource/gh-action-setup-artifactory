@@ -12,11 +12,12 @@ require_env() {
   require_var "$2" "Missing env var '$1'"
 }
 
+# Linux base64 wraps while macOS does not
 encode() {
   local os
   os=$(uname | tr '[:upper:]' '[:lower:]')
   if [ "$os" == "linux" ]; then
-    echo "$1" | base64
+    echo "$1" | base64 --wrap=0
   else
     echo "$1" | base64
   fi
