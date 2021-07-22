@@ -54,7 +54,7 @@ jobs:
         with:
           go-version: 1.16
 
-      - name: Version
+      - name: Next tag info
         id: tag
         run: |
           go install github.com/caarlos0/svu@v1.2.0
