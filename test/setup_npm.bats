@@ -39,6 +39,29 @@ EOF
 }
 
 # shellcheck disable=SC2034
+@test "setup_npm can configure npm with scope" {
+  HOME="$TMPDIR"
+  ARTIFACTORY_USERNAME="test_username"
+  ARTIFACTORY_TOKEN="test_token"
+  ARTIFACTORY_NPM_REGISTRY="https://example.com/test_registry/"
+  ARTIFACTORY_NPM_SCOPE="@acme"
+
+  run setup_npm
+  assert_success
+  assert [ -f "$TMPDIR/.npmrc" ]
+
+  run cat "$TMPDIR/.npmrc"
+  assert_success
+  assert_output - <<EOF
+@acme:registry=https://example.com/test_registry/
+//example.com/test_registry/:_password=dGVzdF90b2tlbgo=
+//example.com/test_registry/:username=test_username
+//example.com/test_registry/:always-auth=true
+EOF
+
+}
+
+# shellcheck disable=SC2034
 @test "setup_npm can be disabled" {
   HOME="$TMPDIR"
   ARTIFACTORY_SETUP_NPM="false"

@@ -45,6 +45,10 @@ Example for configuring only `npm`:
           ARTIFACTORY_NPM_REGISTRY: ${{ secrets.ARTIFACTORY_NPM_REGISTRY }}
 ```
 
+Additional environment variables:
+
+- `ARTIFACTORY_NPM_SCOPE` adds a scope to the NPM credential setup.
+
 ## Usage: Other
 
 You can invoke the shell scripts directly in non-GitHub workflows.

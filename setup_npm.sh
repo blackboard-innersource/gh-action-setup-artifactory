@@ -33,6 +33,12 @@ setup_npm() {
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
   require_env "ARTIFACTORY_NPM_REGISTRY" "$ARTIFACTORY_NPM_REGISTRY" || return 1
 
+  local scope
+  scope=""
+  if [ -n "$ARTIFACTORY_NPM_SCOPE" ]; then
+    scope="${ARTIFACTORY_NPM_SCOPE}:"
+  fi
+
   local key
   key=${ARTIFACTORY_NPM_REGISTRY#"https://"}
 
@@ -40,7 +46,7 @@ setup_npm() {
   npmrc="$HOME/.npmrc"
 
   cat > "$npmrc" << EOF
-registry=$ARTIFACTORY_NPM_REGISTRY
+${scope}registry=$ARTIFACTORY_NPM_REGISTRY
 //$key:_password=$(encode "$ARTIFACTORY_TOKEN")
 //$key:username=$ARTIFACTORY_USERNAME
 //$key:always-auth=true
