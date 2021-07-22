@@ -34,12 +34,17 @@ setup_pip() {
   domain=$(echo "$ARTIFACTORY_PYPI_INDEX" | awk -F '[/:]' '{print $4}')
   require_var "$domain" "Failed to extract domain from ARTIFACTORY_PYPI_INDEX env var" || return 1
 
-  cat > "$HOME/.netrc" << EOF
+  local netrc
+  netrc="$HOME/.netrc"
+
+  cat > "$netrc" << EOF
 machine $domain
 login $ARTIFACTORY_USERNAME
 password $ARTIFACTORY_TOKEN
 
 EOF
+
+  echo "Wrote to $netrc"
 
   "$pipCmd" config set global.index-url "$ARTIFACTORY_PYPI_INDEX"
   "$pipCmd" config set global.extra-index-url https://pypi.org/simple

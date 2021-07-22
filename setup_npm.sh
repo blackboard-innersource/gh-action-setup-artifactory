@@ -36,13 +36,18 @@ setup_npm() {
   local key
   key=${ARTIFACTORY_NPM_REGISTRY#"https://"}
 
-  cat > "$HOME/.npmrc" << EOF
+  local npmrc
+  npmrc="$HOME/.npmrc"
+
+  cat > "$npmrc" << EOF
 registry=$ARTIFACTORY_NPM_REGISTRY
 //$key:_password=$(encode "$ARTIFACTORY_TOKEN")
 //$key:username=$ARTIFACTORY_USERNAME
 //$key:always-auth=true
 
 EOF
+
+  echo "Wrote to $npmrc"
 
   return 0
 }
