@@ -68,7 +68,7 @@ jobs:
       - name: Version
         id: version
         if: steps.tag.outputs.make == '1'
-        uses: blackboard-innersource/gh-action-version-cat@v1
+        uses: blackboard-innersource/gh-action-version-cat@v2.0.1
 
       - name: Create GitHub release
         if: steps.tag.outputs.make == '1'
