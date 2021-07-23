@@ -47,7 +47,7 @@ Example for configuring only `npm`:
 
 Additional environment variables:
 
-- `ARTIFACTORY_NPM_SCOPE` adds a scope to the NPM credential setup.
+- `ARTIFACTORY_NPM_SCOPES` adds a scope to the NPM credential setup. Set multiple scopes with: `"@scope1,@scope2"`
 
 ## Usage: Other
 
