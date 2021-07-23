@@ -33,23 +33,35 @@ setup_npm() {
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
   require_env "ARTIFACTORY_NPM_REGISTRY" "$ARTIFACTORY_NPM_REGISTRY" || return 1
 
+  local configKey
+  local npmrc
   local scope
-  scope=""
-  if [ -n "$ARTIFACTORY_NPM_SCOPE" ]; then
-    scope="${ARTIFACTORY_NPM_SCOPE}:"
+  local scopes
+  local parts
+  local registry
+
+  if [ -n "$ARTIFACTORY_NPM_SCOPES" ]; then
+    # Split ARTIFACTORY_NPM_SCOPES by comma
+    IFS="," read -r -a scopes <<< "$ARTIFACTORY_NPM_SCOPES"
+
+    parts=()
+    for scope in "${scopes[@]}"; do
+      parts+=("${scope}:registry=$ARTIFACTORY_NPM_REGISTRY")
+    done
+    # Join the parts array with newline
+    registry=$( IFS=$'\n'; echo "${parts[*]}" )
+  else
+    registry="registry=$ARTIFACTORY_NPM_REGISTRY"
   fi
 
-  local key
-  key=${ARTIFACTORY_NPM_REGISTRY#"https://"}
-
-  local npmrc
+  configKey=${ARTIFACTORY_NPM_REGISTRY#"https://"}
   npmrc="$HOME/.npmrc"
 
   cat > "$npmrc" << EOF
-${scope}registry=$ARTIFACTORY_NPM_REGISTRY
-//$key:_password=$(encode "$ARTIFACTORY_TOKEN")
-//$key:username=$ARTIFACTORY_USERNAME
-//$key:always-auth=true
+$registry
+//${configKey}:_password=$(encode "$ARTIFACTORY_TOKEN")
+//${configKey}:username=$ARTIFACTORY_USERNAME
+//${configKey}:always-auth=true
 
 EOF
 
