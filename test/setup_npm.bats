@@ -70,7 +70,7 @@ EOF
   run setup_npm
   assert_success
   assert [ ! -f "$TMPDIR/.npmrc" ]
-  assert_output "Skipping pip setup because ARTIFACTORY_SETUP_NPM=false"
+  assert_output "Skipping npm setup because ARTIFACTORY_SETUP_NPM=false"
 }
 
 # shellcheck disable=SC2034
