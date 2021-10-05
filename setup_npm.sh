@@ -25,7 +25,7 @@ encode() {
 
 setup_npm() {
   if [ "$ARTIFACTORY_SETUP_NPM" == "false" ]; then
-    echo "Skipping pip setup because ARTIFACTORY_SETUP_NPM=$ARTIFACTORY_SETUP_NPM"
+    echo "Skipping npm setup because ARTIFACTORY_SETUP_NPM=$ARTIFACTORY_SETUP_NPM"
     return 0
   fi
 
