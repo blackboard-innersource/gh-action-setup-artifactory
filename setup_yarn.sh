@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 require_var() {
   if [ -z "$1" ]; then
     >&2 echo "$2"
