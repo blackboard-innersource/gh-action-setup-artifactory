@@ -84,6 +84,7 @@ git clone --quiet --depth 1 --branch v1 https://github.com/blackboard-innersourc
 # Or you can call specific setup scripts 
 ./gh-action-setup-artifactory/setup_pip.sh
 ./gh-action-setup-artifactory/setup_npm.sh
+./gh-action-setup-artifactory/setup_yarn.sh
 ```
 
 ## Developing
