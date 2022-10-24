@@ -15,7 +15,6 @@ require_env() {
 }
 
 setup_yarn() {
-
   if [ "$ARTIFACTORY_YARN_ID_TOKEN" == "false" ]; then
     echo "Skipping yarn setup because ARTIFACTORY_YARN_ID_TOKEN=$ARTIFACTORY_YARN_ID_TOKEN"
     return 0
