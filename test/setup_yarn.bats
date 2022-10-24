@@ -17,7 +17,7 @@ function teardown {
 }
 
 # shellcheck disable=SC2034
-@test "setup_yarn can configure npm" {
+@test "setup_yarn can configure yarnrc.yml" {
   HOME="$TMPDIR"
   ARTIFACTORY_YARN_ID_TOKEN="test_token"
 
@@ -29,7 +29,7 @@ function teardown {
   assert_success
   assert_output - <<EOF
 npmAlwaysAuth: true
-npmAuthToken: "test_token"
+npmAuthToken: test_token
 EOF
 
 }
@@ -46,7 +46,7 @@ EOF
 }
 
 # shellcheck disable=SC2034
-@test "setup_npm fails when missing env var" {
+@test "setup_yarn fails when missing env var" {
   HOME="$TMPDIR"
 
   run setup_yarn

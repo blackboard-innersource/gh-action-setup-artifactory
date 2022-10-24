@@ -14,22 +14,22 @@ require_env() {
   require_var "$2" "Missing env var '$1'"
 }
 
-require_env "ARTIFACTORY_YARN_ID_TOKEN" "$ARTIFACTORY_YARN_ID_TOKEN" || return 1
+setup_yarn() {
 
-if [ "$ARTIFACTORY_YARN_ID_TOKEN" == "false" ]; then
+  if [ "$ARTIFACTORY_YARN_ID_TOKEN" == "false" ]; then
     echo "Skipping yarn setup because ARTIFACTORY_YARN_ID_TOKEN=$ARTIFACTORY_YARN_ID_TOKEN"
     return 0
   fi
 
-setup_yarn() {
-  local lines=()
+  require_env "ARTIFACTORY_YARN_ID_TOKEN" "$ARTIFACTORY_YARN_ID_TOKEN" || return 1
+
   local yarnrc
-
-  lines+=("npmAlwaysAuth: true")
-  lines+=("npmAuthToken: ${ARTIFACTORY_YARN_ID_TOKEN}")
   yarnrc="$HOME/.yarnrc.yml"
-  echo "$lines" > "$yarnrc"
+  cat > "$yarnrc" << EOF
+npmAlwaysAuth: true
+npmAuthToken: ${ARTIFACTORY_YARN_ID_TOKEN}
 
+EOF
   echo "Wrote to $yarnrc"
   return 0
 }
