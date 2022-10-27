@@ -15,18 +15,19 @@ require_env() {
 }
 
 setup_yarn() {
-  if [ "$ARTIFACTORY_YARN_ID_TOKEN" == "false" ]; then
-    echo "Skipping yarn setup because ARTIFACTORY_YARN_ID_TOKEN=$ARTIFACTORY_YARN_ID_TOKEN"
+  if [ "$ARTIFACTORY_YARN_SETUP" == "false" ]; then
+    echo "Skipping yarn setup because ARTIFACTORY_YARN_SETUP=$ARTIFACTORY_YARN_SETUP"
     return 0
   fi
 
-  require_env "ARTIFACTORY_YARN_ID_TOKEN" "$ARTIFACTORY_YARN_ID_TOKEN" || return 1
+  require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
+  require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
 
   local yarnrc
   yarnrc="$HOME/.yarnrc.yml"
   cat > "$yarnrc" << EOF
 npmAlwaysAuth: true
-npmAuthToken: ${ARTIFACTORY_YARN_ID_TOKEN}
+npmAuthToken: ${ARTIFACTORY_USERNAME}:${ARTIFACTORY_TOKEN}
 
 EOF
   echo "Wrote to $yarnrc"

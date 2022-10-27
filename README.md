@@ -17,7 +17,6 @@ Example for configuring all - `pip`, `npm/yarn1` and `yarn2+`:
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-          ARTIFACTORY_YARN_ID_TOKEN: ${{ secrets.ARTIFACTORY_YARN_ID_TOKEN }}
           ARTIFACTORY_PYPI_INDEX: ${{ secrets.ARTIFACTORY_PYPI_INDEX }}
           ARTIFACTORY_NPM_REGISTRY: ${{ secrets.ARTIFACTORY_NPM_REGISTRY }}
 ```
@@ -29,7 +28,7 @@ Example for configuring only `pip`:
         uses: blackboard-innersource/gh-action-setup-artifactory@v1
         env:
           ARTIFACTORY_SETUP_NPM: false
-          ARTIFACTORY_YARN_ID_TOKEN: false
+          ARTIFACTORY_YARN_SETUP: false
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
           ARTIFACTORY_PYPI_INDEX: ${{ secrets.ARTIFACTORY_PYPI_INDEX }}
@@ -42,7 +41,7 @@ Example for configuring only `npm/yarn1`:
         uses: blackboard-innersource/gh-action-setup-artifactory@v1
         env:
           ARTIFACTORY_SETUP_PIP: false
-          ARTIFACTORY_YARN_ID_TOKEN: false
+          ARTIFACTORY_YARN_SETUP: false
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
           ARTIFACTORY_NPM_REGISTRY: ${{ secrets.ARTIFACTORY_NPM_REGISTRY }}
@@ -56,7 +55,8 @@ Example for configuring only `yarn2+`:
         env:
           ARTIFACTORY_SETUP_PIP: false
           ARTIFACTORY_SETUP_NPM: false
-          ARTIFACTORY_YARN_ID_TOKEN: ${{ secrets.ARTIFACTORY_YARN_ID_TOKEN }}
+          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 ```
 
 Additional environment variables:

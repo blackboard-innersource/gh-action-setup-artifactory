@@ -33,7 +33,6 @@ jobs:
         env:
           ARTIFACTORY_USERNAME: test_username
           ARTIFACTORY_TOKEN: test_token
-          ARTIFACTORY_YARN_ID_TOKEN: test_token
           ARTIFACTORY_PYPI_INDEX: https://example.com/test_pypi_index
           ARTIFACTORY_NPM_REGISTRY: https://example.com/test_npm_registry/
 

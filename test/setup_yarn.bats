@@ -19,7 +19,8 @@ function teardown {
 # shellcheck disable=SC2034
 @test "setup_yarn can configure yarnrc.yml" {
   HOME="$TMPDIR"
-  ARTIFACTORY_YARN_ID_TOKEN="test_token"
+  ARTIFACTORY_USERNAME="test_username"
+  ARTIFACTORY_TOKEN="test_token"
 
   run setup_yarn
   assert_success
@@ -29,7 +30,7 @@ function teardown {
   assert_success
   assert_output - <<EOF
 npmAlwaysAuth: true
-npmAuthToken: test_token
+npmAuthToken: test_username:test_token
 EOF
 
 }
@@ -37,12 +38,12 @@ EOF
 # shellcheck disable=SC2034
 @test "setup_yarn can be disabled" {
   HOME="$TMPDIR"
-  ARTIFACTORY_YARN_ID_TOKEN="false"
+  ARTIFACTORY_YARN_SETUP="false"
 
   run setup_yarn
   assert_success
   assert [ ! -f "$TMPDIR/.yarnrc.yml" ]
-  assert_output "Skipping yarn setup because ARTIFACTORY_YARN_ID_TOKEN=false"
+  assert_output "Skipping yarn setup because ARTIFACTORY_YARN_SETUP=false"
 }
 
 # shellcheck disable=SC2034
@@ -52,5 +53,5 @@ EOF
   run setup_yarn
   assert_failure
   assert [ ! -f "$TMPDIR/.yarnrc.yml" ]
-  assert_output "Missing env var 'ARTIFACTORY_YARN_ID_TOKEN'"
+  assert_output "Missing env var 'ARTIFACTORY_USERNAME'"
 }
