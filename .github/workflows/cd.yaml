@@ -45,6 +45,9 @@ jobs:
       - name: Test .npmrc exists
         run: test -f ~/.npmrc && cat ~/.npmrc
 
+      - name: Test .yarnrc.yml exists
+        run: test -f ~/.yarnrc.yml && cat ~/.yarnrc.yml
+
   cd:
     needs: [test, action]
     if: github.event_name == 'push'

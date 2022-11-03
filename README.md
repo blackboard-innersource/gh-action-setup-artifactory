@@ -9,7 +9,7 @@ Configures package managers to authenticate to Artifactory.
 Every configuration option gets set via environment variables to help improve security and
 to allow usage in other CI/CD systems.
 
-Example for configuring both `pip` and `npm`:
+Example for configuring all - `pip`, `npm/yarn1` and `yarn2+`:
 
 ```yaml
       - name: Setup Artifactory
@@ -28,26 +28,40 @@ Example for configuring only `pip`:
         uses: blackboard-innersource/gh-action-setup-artifactory@v1
         env:
           ARTIFACTORY_SETUP_NPM: false
+          ARTIFACTORY_YARN_SETUP: false
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
           ARTIFACTORY_PYPI_INDEX: ${{ secrets.ARTIFACTORY_PYPI_INDEX }}
 ```
 
-Example for configuring only `npm`:
+Example for configuring only `npm/yarn1`:
 
 ```yaml
       - name: Setup Artifactory
         uses: blackboard-innersource/gh-action-setup-artifactory@v1
         env:
           ARTIFACTORY_SETUP_PIP: false
+          ARTIFACTORY_YARN_SETUP: false
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
           ARTIFACTORY_NPM_REGISTRY: ${{ secrets.ARTIFACTORY_NPM_REGISTRY }}
 ```
 
-Additional environment variables:
+Example for configuring only `yarn2+`:
 
-- `ARTIFACTORY_NPM_SCOPES` adds a scope to the NPM credential setup. Set multiple scopes with: `"@scope1,@scope2"`
+```yaml
+      - name: Setup Artifactory
+        uses: blackboard-innersource/gh-action-setup-artifactory@v1
+        env:
+          ARTIFACTORY_SETUP_PIP: false
+          ARTIFACTORY_SETUP_NPM: false
+          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+```
+
+Additional environment variables:
+- `ARTIFACTORY_NPM_SCOPES` adds a scope to the NPM/yarn1 credential setup. Set multiple scopes with: `"@scope1,@scope2"`
+  - DO NOT USE for yarn2+ - both repository and scopes should be configured in project's .yarnrc.yml file
 
 ## Usage: Other
 
@@ -70,6 +84,7 @@ git clone --quiet --depth 1 --branch v1 https://github.com/blackboard-innersourc
 # Or you can call specific setup scripts 
 ./gh-action-setup-artifactory/setup_pip.sh
 ./gh-action-setup-artifactory/setup_npm.sh
+./gh-action-setup-artifactory/setup_yarn.sh
 ```
 
 ## Developing
