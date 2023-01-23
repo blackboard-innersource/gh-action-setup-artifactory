@@ -68,7 +68,10 @@ install_binary() {
   for dest in "${dests[@]}"; do
     # This if is testing if our destination is in the $PATH (start, middle, end)
     if [[ "$PATH" == "${dest}:"*  ]] || [[ "$PATH" == *":${dest}:"*  ]] || [[ "$PATH" == *":${dest}"  ]]; then
-      install --mode +x "$1" "$dest" || >&2 echo "Failed to install ${1} to ${dest}"; return 1
+      if ! install --mode +x "$1" "$dest"; then
+        >&2 echo "Failed to install ${1} to ${dest}"
+        return 1
+      fi
       echo "Installed ${1} to ${dest}"
       jf intro || return 1
       return 0

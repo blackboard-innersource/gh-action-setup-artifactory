@@ -49,6 +49,7 @@ jobs:
         run: test -f ~/.yarnrc.yml && cat ~/.yarnrc.yml
 
       - name: Test Setup JFrog
+        shell: bash
         run: ./setup_jfrog.sh
 
   cd:
