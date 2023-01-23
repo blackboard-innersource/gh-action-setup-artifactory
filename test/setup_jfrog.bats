@@ -30,6 +30,25 @@ function teardown {
 }
 
 # shellcheck disable=SC2034
+@test "setup_jfrog can download linux amd64" {
+  get_os() { echo "linux"; }
+  export -f get_os
+
+  get_arch() { echo "amd64"; }
+  export -f get_arch
+
+  install_binary() { return 0; }
+  export -f install_binary
+
+  config_jf() { return 1; }
+  export -f config_jf
+
+  run setup_jfrog
+  assert_success
+  refute_output --partial "Failed to verify checksum"
+}
+
+# shellcheck disable=SC2034
 @test "setup_jfrog can download linux arm64" {
   get_os() { echo "linux"; }
   export -f get_os

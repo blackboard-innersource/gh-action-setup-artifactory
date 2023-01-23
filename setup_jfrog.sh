@@ -37,9 +37,10 @@ get_arch() {
   machineType="$(uname -m)"
   case $machineType in
       i386 | i486 | i586 | i686 | i786 | x86) arch="386";;
+      amd64 | x86_64 | x64) arch="amd64";;
       arm | armv7l) arch="arm";;
       aarch64) arch="arm64";;
-      *) >&2 echo "Unknown machine type (arch): $machineType" return 1;;
+      *) >&2 echo "Unknown machine type (arch): $machineType"; return 1;;
   esac
 
   echo "$arch"
@@ -50,6 +51,7 @@ get_checksum() {
     local cs
     case "$1" in
         linux_386) cs="bab62d95d639a1becf48426d5642bf9d40d907926306f3f197d0eaaf6c96f0b2";;
+        linux_amd64) cs="5b39866e79a35ca4bc87dabaae6360cbbf9b224f9a97672998dbfc655faeb594";;
         linux_arm64) cs="4415dbee89260d29d51b123dbcf6e608c29d5c2e05df00f644944645bbfbc0ad";;
         *) >&2 echo "No checksum defined for ${1}"; return 1;;
     esac
@@ -93,11 +95,11 @@ setup_jfrog() {
   majorVersion="v2-jf"
   os=$(get_os)
   arch=$(get_arch)
-  checksum=$(get_checksum "${os}_${arch}")
 
   require_var "$os" "Failed to determine OS" || return 1
   require_var "$arch" "Failed to determine machine architecture" || return 1
 
+  checksum=$(get_checksum "${os}_${arch}")
   url="https://releases.jfrog.io/artifactory/jfrog-cli/${majorVersion}/${version}/jfrog-cli-${os}-${arch}/jf"
 
   echo "Using curl to download: ${url}"
