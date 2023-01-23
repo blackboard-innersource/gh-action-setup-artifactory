@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+
+# EXPERIMENTAL: this script is primarily for installing jfrog CLI in CodeBuild For GitHub Actions,
+# https://github.com/jfrog/setup-jfrog-cli is more stable, but this script does try to verify checksums.
+
+# Highly customized version of https://install-cli.jfrog.io - primarily refer back to this script to see all the
+# different download URL options.
+
+require_var() {
+  if [ -z "$1" ]; then
+    >&2 echo "$2"
+    return 1
+  fi
+  return 0
+}
+
+require_env() {
+  require_var "$2" "Missing env var '$1'"
+}
+
+# Map operating system to what JFrog named the operating system in their download URL
+get_os() {
+  local os
+  os=$(uname | tr '[:upper:]' '[:lower:]')
+  case "$os" in
+      linux) os="linux";;
+      *) >&2 echo "OS ${os} is not supported by this installation script"; return 1;;
+  esac
+
+  echo "$os"
+  return 0
+}
+
+# Map arch to what JFrog named the arch in their download URL
+get_arch() {
+  local machineType arch
+  machineType="$(uname -m)"
+  case $machineType in
+      i386 | i486 | i586 | i686 | i786 | x86) arch="386";;
+      arm | armv7l) arch="arm";;
+      aarch64) arch="arm64";;
+      *) >&2 echo "Unknown machine type (arch): $machineType" return 1;;
+  esac
+
+  echo "$arch"
+  return 0
+}
+
+get_checksum() {
+    local cs
+    case "$1" in
+        linux_386) cs="bab62d95d639a1becf48426d5642bf9d40d907926306f3f197d0eaaf6c96f0b2";;
+        linux_arm64) cs="4415dbee89260d29d51b123dbcf6e608c29d5c2e05df00f644944645bbfbc0ad";;
+        *) >&2 echo "No checksum defined for ${1}"; return 1;;
+    esac
+
+    echo "$cs  jf"
+    return 0
+}
+
+install_binary() {
+  local dest dests
+
+  dests=("/usr/local/bin" "/usr/bin" "/opt/bin")
+
+  for dest in "${dests[@]}"; do
+    # This if is testing if our destination is in the $PATH (start, middle, end)
+    if [[ "$PATH" == "${dest}:"*  ]] || [[ "$PATH" == *":${dest}:"*  ]] || [[ "$PATH" == *":${dest}"  ]]; then
+      install --mode +x "$1" "$dest" || >&2 echo "Failed to install ${1} to ${dest}"; return 1
+      echo "Installed ${1} to ${dest}"
+      jf intro || return 1
+      return 0
+    fi
+  done
+
+  >&2 echo "Failed to install ${1}; None of these paths appear in \$PATH: ${dests[*]} and \$PATH=${PATH}"
+  return 1
+}
+
+config_jf() {
+  require_env "ARTIFACTORY_URL" "$ARTIFACTORY_URL" || return 1
+  require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
+  require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
+
+  jf config add default --url "$ARTIFACTORY_URL" --user "$ARTIFACTORY_USERNAME" --access-token "$ARTIFACTORY_TOKEN" || return 1
+  jf rt ping || return 1
+}
+
+setup_jfrog() {
+  local version majorVersion os arch checksum url
+
+  version="2.33.0"
+  majorVersion="v2-jf"
+  os=$(get_os)
+  arch=$(get_arch)
+  checksum=$(get_checksum "${os}_${arch}")
+
+  require_var "$os" "Failed to determine OS" || return 1
+  require_var "$arch" "Failed to determine machine architecture" || return 1
+
+  url="https://releases.jfrog.io/artifactory/jfrog-cli/${majorVersion}/${version}/jfrog-cli-${os}-${arch}/jf"
+
+  echo "Using curl to download: ${url}"
+
+  # --globoff is here if we ever allow "[RELEASE]" for the version (downloads latest)
+  # --location allows for redirects
+  # --silent --show-error disables process meter but still prints errors
+  curl --globoff --location --silent --show-error --output jf "$url" || >&2 echo "The curl command failed for downloading from JFrog" return 1
+
+  if [[ ! -f "jf" ]]; then
+    >&2 echo "Failed to download jf binary from JFrog"
+    return 1
+  fi
+
+  echo "Verifying checksum of jf"
+  if ! echo "${checksum}" | sha256sum -c; then
+    >&2 echo "Failed to verify checksum."
+    >&2 echo "Expected: ${checksum}"
+    >&2 echo "Got:      $(sha256sum jf)"
+    return 1
+  fi
+
+  install_binary "jf" || >&2 echo "Failed to install jf" return 1
+
+  # Allow for install only and no config
+  if [ -z "$ARTIFACTORY_URL" ]; then
+    echo "Skipping configuring jf because ARTIFACTORY_URL env var is empty"
+    return 0
+  fi
+
+  config_jf || >&2 echo "Failed to configure jf" return 1
+}
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+  if setup_jfrog "$@"; then
+    exit 0
+  fi
+  exit 1
+fi
