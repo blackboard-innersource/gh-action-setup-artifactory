@@ -109,7 +109,10 @@ setup_jfrog() {
   # --globoff is here if we ever allow "[RELEASE]" for the version (downloads latest)
   # --location allows for redirects
   # --silent --show-error disables process meter but still prints errors
-  curl --globoff --location --silent --show-error --output jf "$url" || >&2 echo "The curl command failed for downloading from JFrog"; return 1
+  if ! curl --globoff --location --silent --show-error --output jf "$url"; then
+    >&2 echo "The curl command failed for downloading from JFrog"
+    return 1
+  fi
 
   if [[ ! -f "jf" ]]; then
     >&2 echo "Failed to download jf binary from JFrog"
@@ -124,7 +127,10 @@ setup_jfrog() {
     return 1
   fi
 
-  install_binary "jf" || >&2 echo "Failed to install jf"; return 1
+  if ! install_binary "jf"; then
+    >&2 echo "Failed to install jf";
+   return 1
+  fi
 
   # Allow for install only and no config
   if [ -z "$ARTIFACTORY_URL" ]; then
@@ -132,7 +138,10 @@ setup_jfrog() {
     return 0
   fi
 
-  config_jf || >&2 echo "Failed to configure jf"; return 1
+  if ! config_jf; then
+    >&2 echo "Failed to configure jf"
+    return 1
+  fi
 }
 
 if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
