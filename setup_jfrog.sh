@@ -50,7 +50,6 @@ get_arch() {
 get_checksum() {
     local cs
     case "$1" in
-        linux_386) cs="bab62d95d639a1becf48426d5642bf9d40d907926306f3f197d0eaaf6c96f0b2";;
         linux_amd64) cs="5b39866e79a35ca4bc87dabaae6360cbbf9b224f9a97672998dbfc655faeb594";;
         linux_arm64) cs="4415dbee89260d29d51b123dbcf6e608c29d5c2e05df00f644944645bbfbc0ad";;
         *) >&2 echo "No checksum defined for ${1}"; return 1;;
@@ -87,7 +86,7 @@ config_jf() {
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
 
-  jf config add default --interactive false --url "$ARTIFACTORY_URL" --user "$ARTIFACTORY_USERNAME" --access-token "$ARTIFACTORY_TOKEN" || return 1
+  CI=true jf config add default --url "$ARTIFACTORY_URL" --user "$ARTIFACTORY_USERNAME" --access-token "$ARTIFACTORY_TOKEN" || return 1
   jf rt ping || return 1
 }
 
@@ -110,7 +109,7 @@ setup_jfrog() {
   # --globoff is here if we ever allow "[RELEASE]" for the version (downloads latest)
   # --location allows for redirects
   # --silent --show-error disables process meter but still prints errors
-  curl --globoff --location --silent --show-error --output jf "$url" || >&2 echo "The curl command failed for downloading from JFrog" return 1
+  curl --globoff --location --silent --show-error --output jf "$url" || >&2 echo "The curl command failed for downloading from JFrog"; return 1
 
   if [[ ! -f "jf" ]]; then
     >&2 echo "Failed to download jf binary from JFrog"
@@ -125,7 +124,7 @@ setup_jfrog() {
     return 1
   fi
 
-  install_binary "jf" || >&2 echo "Failed to install jf" return 1
+  install_binary "jf" || >&2 echo "Failed to install jf"; return 1
 
   # Allow for install only and no config
   if [ -z "$ARTIFACTORY_URL" ]; then
@@ -133,7 +132,7 @@ setup_jfrog() {
     return 0
   fi
 
-  config_jf || >&2 echo "Failed to configure jf" return 1
+  config_jf || >&2 echo "Failed to configure jf"; return 1
 }
 
 if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
