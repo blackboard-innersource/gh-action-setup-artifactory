@@ -72,7 +72,7 @@ install_binary() {
         return 1
       fi
       echo "Installed ${1} to ${dest}"
-      jf intro || return 1
+      jf --version || return 1
       return 0
     fi
   done
@@ -86,7 +86,9 @@ config_jf() {
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
 
+  echo "Configure JFrog server"
   CI=true jf config add default --url "$ARTIFACTORY_URL" --user "$ARTIFACTORY_USERNAME" --access-token "$ARTIFACTORY_TOKEN" || return 1
+  echo -n "Ping JFrog server: "
   jf rt ping || return 1
 }
 
