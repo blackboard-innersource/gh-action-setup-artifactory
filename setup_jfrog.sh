@@ -47,6 +47,7 @@ get_arch() {
   return 0
 }
 
+# If you upgrade jf, then run tests to get updated checksums
 get_checksum() {
     local cs
     case "$1" in
@@ -88,6 +89,7 @@ config_jf() {
 
   echo "Configure JFrog server"
   CI=true jf config add default --url "$ARTIFACTORY_URL" --user "$ARTIFACTORY_USERNAME" --access-token "$ARTIFACTORY_TOKEN" || return 1
+
   echo -n "Ping JFrog server: "
   jf rt ping || return 1
 }
@@ -95,6 +97,7 @@ config_jf() {
 setup_jfrog() {
   local version majorVersion os arch checksum url
 
+  # If you update versions, then run tests to update checksums
   version="2.33.0"
   majorVersion="v2-jf"
   os=$(get_os)
