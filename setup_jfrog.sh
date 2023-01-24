@@ -78,7 +78,7 @@ install_binary() {
     fi
   done
 
-  >&2 echo "Failed to install ${1}; None of these paths appear in \$PATH: ${dests[*]} and \$PATH=${PATH}"
+  >&2 echo "Failed to install ${1}; None of these paths appear in \$PATH:" "${dests[@]}" "and \$PATH=${PATH}"
   return 1
 }
 
@@ -109,18 +109,18 @@ setup_jfrog() {
   checksum=$(get_checksum "${os}_${arch}")
   url="https://releases.jfrog.io/artifactory/jfrog-cli/${majorVersion}/${version}/jfrog-cli-${os}-${arch}/jf"
 
-  echo "Using curl to download: ${url}"
+  echo "Downloading: ${url}"
 
   # --globoff is here if we ever allow "[RELEASE]" for the version (downloads latest)
   # --location allows for redirects
   # --silent --show-error disables process meter but still prints errors
   if ! curl --globoff --location --silent --show-error --output jf "$url"; then
-    >&2 echo "The curl command failed for downloading from JFrog"
+    >&2 echo "Failed to download the jf binary"
     return 1
   fi
 
   if [[ ! -f "jf" ]]; then
-    >&2 echo "Failed to download jf binary from JFrog"
+    >&2 echo "Failed find the jf binary in current working directory"
     return 1
   fi
 
