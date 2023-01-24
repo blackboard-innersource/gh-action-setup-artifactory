@@ -87,7 +87,7 @@ config_jf() {
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
 
-  jf config add default --url "$ARTIFACTORY_URL" --user "$ARTIFACTORY_USERNAME" --access-token "$ARTIFACTORY_TOKEN" || return 1
+  jf config add default --interactive false --url "$ARTIFACTORY_URL" --user "$ARTIFACTORY_USERNAME" --access-token "$ARTIFACTORY_TOKEN" || return 1
   jf rt ping || return 1
 }
 
