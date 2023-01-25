@@ -48,6 +48,10 @@ jobs:
       - name: Test .yarnrc.yml exists
         run: test -f ~/.yarnrc.yml && cat ~/.yarnrc.yml
 
+      - name: Test Setup JFrog
+        shell: bash
+        run: ./setup_jfrog.sh
+
   cd:
     needs: [test, action]
     if: github.event_name == 'push'
