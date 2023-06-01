@@ -45,6 +45,7 @@ EOF
   ARTIFACTORY_TOKEN="test_token"
   ARTIFACTORY_NPM_REGISTRY="https://example.com/test_registry/"
   ARTIFACTORY_NPM_SCOPES="@acme,@wakka"
+  GITHUB_ACTIONS=""
 
   run setup_npm
   assert_success
