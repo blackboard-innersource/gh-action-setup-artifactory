@@ -40,7 +40,9 @@ setup_npm() {
   local parts
   local registry
 
-  if [ -n "$ARTIFACTORY_NPM_SCOPES" ]; then
+  # Only allow scopes in GitHub Actions, otherwise have to go through Artifactory
+  # At time of writing, there was very little use of the ARTIFACTORY_NPM_SCOPES variable.
+  if [ -n "$ARTIFACTORY_NPM_SCOPES" ] && [ -n "$GITHUB_ACTIONS" ]; then
     # Split ARTIFACTORY_NPM_SCOPES by comma
     IFS="," read -r -a scopes <<< "$ARTIFACTORY_NPM_SCOPES"
 

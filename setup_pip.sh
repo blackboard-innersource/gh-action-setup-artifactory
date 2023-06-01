@@ -47,7 +47,6 @@ EOF
   echo "Wrote to $netrc"
 
   "$pipCmd" config set global.index-url "$ARTIFACTORY_PYPI_INDEX"
-  "$pipCmd" config set global.extra-index-url https://pypi.org/simple
 
   return 0
 }

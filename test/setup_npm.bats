@@ -39,12 +39,36 @@ EOF
 }
 
 # shellcheck disable=SC2034
-@test "setup_npm can configure npm with scopes" {
+@test "setup_npm ignores scopes outside of GitHub Actions" {
   HOME="$TMPDIR"
   ARTIFACTORY_USERNAME="test_username"
   ARTIFACTORY_TOKEN="test_token"
   ARTIFACTORY_NPM_REGISTRY="https://example.com/test_registry/"
   ARTIFACTORY_NPM_SCOPES="@acme,@wakka"
+
+  run setup_npm
+  assert_success
+  assert [ -f "$TMPDIR/.npmrc" ]
+
+  run cat "$TMPDIR/.npmrc"
+  assert_success
+  assert_output - <<EOF
+registry=https://example.com/test_registry/
+//example.com/test_registry/:_password=dGVzdF90b2tlbg==
+//example.com/test_registry/:username=test_username
+//example.com/test_registry/:always-auth=true
+EOF
+
+}
+
+# shellcheck disable=SC2034
+@test "setup_npm can configure npm with scopes in GitHub Actions" {
+  HOME="$TMPDIR"
+  ARTIFACTORY_USERNAME="test_username"
+  ARTIFACTORY_TOKEN="test_token"
+  ARTIFACTORY_NPM_REGISTRY="https://example.com/test_registry/"
+  ARTIFACTORY_NPM_SCOPES="@acme,@wakka"
+  GITHUB_ACTIONS="any value"
 
   run setup_npm
   assert_success
