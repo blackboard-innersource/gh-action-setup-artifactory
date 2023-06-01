@@ -13,7 +13,7 @@ Example for configuring all - `pip`, `npm/yarn1` and `yarn2+`:
 
 ```yaml
       - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v1
+        uses: blackboard-innersource/gh-action-setup-artifactory@v2
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -25,7 +25,7 @@ Example for configuring only `pip`:
 
 ```yaml
       - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v1
+        uses: blackboard-innersource/gh-action-setup-artifactory@v2
         env:
           ARTIFACTORY_SETUP_NPM: false
           ARTIFACTORY_YARN_SETUP: false
@@ -38,7 +38,7 @@ Example for configuring only `npm/yarn1`:
 
 ```yaml
       - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v1
+        uses: blackboard-innersource/gh-action-setup-artifactory@v2
         env:
           ARTIFACTORY_SETUP_PIP: false
           ARTIFACTORY_YARN_SETUP: false
@@ -51,7 +51,7 @@ Example for configuring only `yarn2+`:
 
 ```yaml
       - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v1
+        uses: blackboard-innersource/gh-action-setup-artifactory@v2
         env:
           ARTIFACTORY_SETUP_PIP: false
           ARTIFACTORY_SETUP_NPM: false
@@ -60,8 +60,10 @@ Example for configuring only `yarn2+`:
 ```
 
 Additional environment variables:
-- `ARTIFACTORY_NPM_SCOPES` adds a scope to the NPM/yarn1 credential setup. Set multiple scopes with: `"@scope1,@scope2"`
-  - DO NOT USE for yarn2+ - both repository and scopes should be configured in project's .yarnrc.yml file
+
+`ARTIFACTORY_NPM_SCOPES` adds a scope to the NPM/yarn@v1 credential setup. Set multiple
+scopes with: `"@scope1,@scope2"` This option is ignored everywhere except for in GitHub
+actions. **Generally, never use this variable!**
 
 ## Usage: Other
 
@@ -76,7 +78,7 @@ export ARTIFACTORY_TOKEN="token"
 git clone --quiet --depth 1 https://github.com/blackboard-innersource/gh-action-setup-artifactory.git
 
 # Or using a tag
-git clone --quiet --depth 1 --branch v1 https://github.com/blackboard-innersource/gh-action-setup-artifactory.git
+git clone --quiet --depth 1 --branch v2 https://github.com/blackboard-innersource/gh-action-setup-artifactory.git
 
 # Same entry point as the GitHub action 
 ./gh-action-setup-artifactory/entry.sh

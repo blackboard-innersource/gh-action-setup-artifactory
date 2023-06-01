@@ -51,8 +51,8 @@ get_arch() {
 get_checksum() {
     local cs
     case "$1" in
-        linux_amd64) cs="5b39866e79a35ca4bc87dabaae6360cbbf9b224f9a97672998dbfc655faeb594";;
-        linux_arm64) cs="4415dbee89260d29d51b123dbcf6e608c29d5c2e05df00f644944645bbfbc0ad";;
+        linux_amd64) cs="c12909c25ca96047ac2fced0383964d906e011c0569dbc1215e59e326c57754e";;
+        linux_arm64) cs="f5b3e4e252d2f7b89b51610d334b810b744a2fcae2d324d4217cbb0f119c21c4";;
         *) >&2 echo "No checksum defined for ${1}"; return 1;;
     esac
 
@@ -98,7 +98,7 @@ setup_jfrog() {
   local version majorVersion os arch checksum url
 
   # If you update versions, then run tests to update checksums
-  version="2.33.0"
+  version="2.39.0"
   majorVersion="v2-jf"
   os=$(get_os)
   arch=$(get_arch)

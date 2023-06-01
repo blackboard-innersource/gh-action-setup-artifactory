@@ -34,7 +34,6 @@ function teardown {
   assert_output - <<EOF
 [global]
 index-url = https://example.com/test_index
-extra-index-url = https://pypi.org/simple
 EOF
 
   run cat "$TMPDIR/.netrc"
