@@ -59,8 +59,8 @@ Example for configuring only `yarn2+`:
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 ```
 
-Example for configuring only JFrog (`jf`) CLI (just add `ARTIFACTORY_URL` to trigger setup
-for JFrog):
+Example for configuring only JFrog CLI (`jf`). Just add `ARTIFACTORY_URL` to trigger setup
+for JFrog CLI:
 
 ```yaml
       - name: Setup Artifactory
