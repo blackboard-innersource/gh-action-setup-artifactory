@@ -60,8 +60,10 @@ Example for configuring only `yarn2+`:
 ```
 
 Additional environment variables:
-- `ARTIFACTORY_NPM_SCOPES` adds a scope to the NPM/yarn1 credential setup. Set multiple scopes with: `"@scope1,@scope2"`
-  - DO NOT USE for yarn2+ - both repository and scopes should be configured in project's .yarnrc.yml file
+
+`ARTIFACTORY_NPM_SCOPES` adds a scope to the NPM/yarn@v1 credential setup. Set multiple
+scopes with: `"@scope1,@scope2"` This option is ignored everywhere except for in GitHub
+actions. **Generally, never use this variable!**
 
 ## Usage: Other
 
