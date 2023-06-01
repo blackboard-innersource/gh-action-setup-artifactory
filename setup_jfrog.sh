@@ -95,6 +95,11 @@ config_jf() {
 }
 
 setup_jfrog() {
+  if [ "$ARTIFACTORY_SETUP_JFROG" == "false" ]; then
+    echo "Skipping jf setup because ARTIFACTORY_SETUP_JFROG=$ARTIFACTORY_SETUP_JFROG"
+    return 0
+  fi
+
   local version majorVersion os arch checksum url
 
   # If you update versions, then run tests to update checksums

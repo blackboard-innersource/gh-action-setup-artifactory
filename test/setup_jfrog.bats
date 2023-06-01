@@ -54,3 +54,12 @@ function teardown {
   assert_failure
   assert_output "No checksum defined for not_real"
 }
+
+# shellcheck disable=SC2034
+@test "setup_jfrog can be disabled" {
+  ARTIFACTORY_SETUP_JFROG="false"
+
+  run setup_jfrog
+  assert_success
+  assert_output "Skipping jf setup because ARTIFACTORY_SETUP_JFROG=false"
+}

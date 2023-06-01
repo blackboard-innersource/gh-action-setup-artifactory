@@ -90,6 +90,7 @@ jobs:
         run: |
           gh release create ${{ steps.version.outputs.version }} \
             --title ${{ steps.version.outputs.version }} \
+            --generate-notes \
             --target ${{ github.sha }}
 
       - name: Checkout ${{ steps.version.outputs.version }}

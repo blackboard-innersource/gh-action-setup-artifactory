@@ -59,6 +59,21 @@ Example for configuring only `yarn2+`:
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 ```
 
+Example for configuring only JFrog CLI (`jf`). Just add `ARTIFACTORY_URL` to trigger setup
+for JFrog CLI:
+
+```yaml
+      - name: Setup Artifactory
+        uses: blackboard-innersource/gh-action-setup-artifactory@v2
+        env:
+          ARTIFACTORY_SETUP_PIP: false
+          ARTIFACTORY_SETUP_NPM: false
+          ARTIFACTORY_YARN_SETUP: false
+          ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
+          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+```
+
 Additional environment variables:
 
 `ARTIFACTORY_NPM_SCOPES` adds a scope to the NPM/yarn@v1 credential setup. Set multiple
