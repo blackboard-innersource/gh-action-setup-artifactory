@@ -20,17 +20,31 @@ setup_yarn() {
     return 0
   fi
 
-  require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
 
-  local yarnrc
-  yarnrc="$HOME/.yarnrc.yml"
-  cat > "$yarnrc" << EOF
-npmAlwaysAuth: true
-npmAuthToken: ${ARTIFACTORY_USERNAME}:${ARTIFACTORY_TOKEN}
+  ARTIFACTORY_REGISTRY="https://blackboard.jfrog.io/artifactory/api/npm/fnds-npm/"
 
+  if [[ -d "$PWD/.yarn/releases" ]]; then
+    echo "Yarn 2+ was detected"
+
+    # https://yarnpkg.com/cli/config/set
+    yarn config set -H npmAlwaysAuth "true"
+    yarn config set -H npmAuthToken "$ARTIFACTORY_TOKEN"
+    yarn config set -H npmRegistryServer "$ARTIFACTORY_REGISTRY"
+  else
+    echo "Yarn 1 was detected"
+
+    local yarnrc
+    yarnrc="$HOME/.yarnrc"
+    cat > "$yarnrc" << EOF
+registry=$ARTIFACTORY_REGISTRY
+$ARTIFACTORY_REGISTRY:_authToken="${ARTIFACTORY_TOKEN}"
+$ARTIFACTORY_REGISTRY:always-auth="true"
 EOF
-  echo "Wrote to $yarnrc"
+
+    echo "Wrote to $yarnrc"
+  fi
+
   return 0
 }
 
