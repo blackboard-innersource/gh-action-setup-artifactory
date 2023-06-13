@@ -45,8 +45,9 @@ jobs:
       - name: Test .npmrc exists
         run: test -f ~/.npmrc && cat ~/.npmrc
 
-      - name: Test .yarnrc.yml exists
-        run: test -f ~/.yarnrc.yml && cat ~/.yarnrc.yml
+      - name: Test .yarnrc exists
+        run: >-
+          test -f ~/.yarnrc && cat ~/.yarnrc || exit 1
 
       - name: Test Setup JFrog
         shell: bash
