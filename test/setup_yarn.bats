@@ -102,8 +102,6 @@ EOF
 @test "setup_yarn fails when missing env var" {
   HOME="$TMPDIR"
 
-  unset ARTIFACTORY_TOKEN
-
   run setup_yarn
   assert_failure
   assert [ ! -f "$TMPDIR/.yarnrc" ]
