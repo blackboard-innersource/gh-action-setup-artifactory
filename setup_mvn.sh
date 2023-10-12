@@ -13,7 +13,7 @@ require_env() {
 }
 
 add_text_to_xml() {
-  for array in ${settings_arrays[@]};do
+  for array in "${settings_arrays[@]}";do
     IFS=", " read -r -a settings_values <<< $array
     case ${1} in
       "server_text")

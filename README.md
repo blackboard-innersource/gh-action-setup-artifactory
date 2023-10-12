@@ -96,6 +96,7 @@ Example for configuring only `mvn`:
           ARTIFACTORY_SETUP_NPM: false
           ARTIFACTORY_YARN_SETUP: false
           ARTIFACTORY_MVN_DEFAULT: false
+          ARTIFACTORY_MVN_URL: https://test.io/artifactory/
           ARTIFACTORY_MVN_REPOS_CENTRAL: fnds-maven-local,central,fnds-maven-local,false
           ARTIFACTORY_MVN_REPOS_SNAPSHOTS: fnds-maven-local,snapshots,fnds-maven-local,false
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
