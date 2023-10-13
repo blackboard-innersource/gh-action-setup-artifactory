@@ -75,18 +75,6 @@ Example for configuring only `yarn2+`:
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 ```
 
-If you want to change the settings for `mvn`, you need to set environment variable `ARTIFACTORY_MVN_DEFAULT=false` and create variables containing prefix `ARTIFACTORY_MVN_REPOS_` with 4 values separated by a comma.
-
-Default repository and plugin settings for `mvn`:
-* id: central, snapshots (first position in environment variable)
-* name: fnds-maven (second position in environment variable)
-* url: https://blackboard.jfrog.io/artifactory/fnds-maven (third position in environment variable)
-* snapshots enabled: false (fourth position in environment variable)
-
-For URL the default prefix is https://blackboard.jfrog.io/artifactory/. If you want to use other URL, you need to set environment variable `ARTIFACTORY_MVN_URL` with different prefix.
-
-The default environment variables are `fnds-maven,central,fnds-maven,false` and `fnds-maven,snapshots,fnds-maven,false`.
-
 Example for configuring only `mvn`:
 ```yaml
       - name: Setup Artifactory
@@ -95,10 +83,6 @@ Example for configuring only `mvn`:
           ARTIFACTORY_SETUP_PIP: false
           ARTIFACTORY_SETUP_NPM: false
           ARTIFACTORY_YARN_SETUP: false
-          ARTIFACTORY_MVN_DEFAULT: false
-          ARTIFACTORY_MVN_URL: https://test.io/artifactory/
-          ARTIFACTORY_MVN_REPOS_CENTRAL: fnds-maven-local,central,fnds-maven-local,false
-          ARTIFACTORY_MVN_REPOS_SNAPSHOTS: fnds-maven-local,snapshots,fnds-maven-local,false
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 ```

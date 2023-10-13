@@ -14,36 +14,41 @@ require_env() {
 
 add_text_to_xml() {
   for array in "${settings_arrays[@]}";do
-    IFS=", " read -r -a settings_values <<< $array
+    IFS=", " read -r -a setting_values <<< $array
+    if [[ "${setting_values[3]}" == "false" ]];then
+    snapshots_text="\
+<snapshots>
+          <enabled>false</enabled>
+         </snapshots>"
+    else
+    snapshots_text="<snapshots/>"
+    fi
+
     case ${1} in
       "server_text")
       echo "\
-      <server>
+<server>
          <username>$ARTIFACTORY_USERNAME</username>
          <password>$ARTIFACTORY_TOKEN</password>
-         <id>${settings_values[1]}</id>
+         <id>${setting_values[1]}</id>
       </server>"
       ;;
       "repository_text")
       echo "\
-      <repository>
-          <snapshots>
-            <enabled>${settings_values[3]}</enabled>
-          </snapshots>
-          <id>${settings_values[1]}</id>
-          <name>${settings_values[0]}</name>
-          <url>${url_prefix}${settings_values[2]}</url>
+<repository>
+          ${snapshots_text}
+          <id>${setting_values[1]}</id>
+          <name>${setting_values[0]}</name>
+          <url>${url_prefix}${setting_values[2]}</url>
       </repository>"
       ;;
       "plugins_text")
       echo "\
-      <pluginRepository>
-          <snapshots>
-            <enabled>${settings_values[3]}</enabled>
-          </snapshots>
-          <id>${settings_values[1]}</id>
-          <name>${settings_values[0]}</name>
-          <url>${url_prefix}${settings_values[2]}</url>
+<pluginRepository>
+          ${snapshots_text}
+          <id>${setting_values[1]}</id>
+          <name>${setting_values[0]}</name>
+          <url>${url_prefix}${setting_values[2]}</url>
       </pluginRepository>"
       ;;
     esac
@@ -59,18 +64,8 @@ setup_mvn() {
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
 
-  url_prefix="${ARTIFACTORY_MVN_URL:-https://blackboard.jfrog.io/artifactory/}"
-  if [[ ${ARTIFACTORY_MVN_DEFAULT} != "false" ]];then
-    settings_arrays=("fnds-maven,central,fnds-maven,false" "fnds-maven,snapshots,fnds-maven,false")
-  else
-    settings_arrays=()
-    prefix=ARTIFACTORY_MVN_REPOS_
-    env_var_names=$(compgen -A variable | grep $prefix)
-    for env_var_name in $env_var_names;do
-      eval env_var_valus='$'$env_var_name
-      settings_arrays[${#settings_arrays[@]}]=$env_var_valus
-    done
-  fi
+  url_prefix="https://blackboard.jfrog.io/artifactory/"
+  settings_arrays=("fnds-maven,central,fnds-maven,false" "fnds-maven,snapshots,fnds-maven,true")
 
   local settings_xml
   local mvn_path
