@@ -14,7 +14,7 @@ require_env() {
 
 add_text_to_xml() {
   for array in "${settings_arrays[@]}";do
-    IFS=", " read -r -a setting_values <<< $array
+    IFS=", " read -r -a setting_values <<< "$array"
     if [[ "${setting_values[3]}" == "false" ]];then
     snapshots_text="\
 <snapshots>
@@ -73,10 +73,10 @@ setup_mvn() {
   settings_xml="${mvn_path}/settings.xml"
 
   if [[ ! -d "${mvn_path}" ]];then
-    mkdir ${mvn_path}
+    mkdir "${mvn_path}"
   fi
 
-  cat > $settings_xml << EOF
+  cat > "$settings_xml" << EOF
 <settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 http://maven.apache.org/xsd/settings-1.2.0.xsd" xmlns="http://maven.apache.org/SETTINGS/1.2.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <servers>
