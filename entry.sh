@@ -7,4 +7,5 @@ dir=$(dirname "${BASH_SOURCE[0]}")
 "$dir/setup_npm.sh"
 "$dir/setup_yarn.sh"
 "$dir/setup_mvn.sh"
+"$dir/setup_go.sh"
 "$dir/setup_jfrog.sh"
