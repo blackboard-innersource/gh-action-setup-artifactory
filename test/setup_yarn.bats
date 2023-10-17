@@ -38,6 +38,17 @@ EOF
 # shellcheck disable=SC2034
 @test "setup_yarn can be disabled" {
   HOME="$TMPDIR"
+  ARTIFACTORY_SETUP_YARN="false"
+
+  run setup_yarn
+  assert_success
+  assert [ ! -f "$TMPDIR/.yarnrc.yml" ]
+  assert_output "Skipping yarn setup because ARTIFACTORY_SETUP_YARN=false"
+}
+
+# shellcheck disable=SC2034
+@test "setup_yarn can be disabled legacy" {
+  HOME="$TMPDIR"
   ARTIFACTORY_YARN_SETUP="false"
 
   run setup_yarn

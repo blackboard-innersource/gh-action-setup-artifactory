@@ -83,9 +83,12 @@ install_binary() {
 }
 
 config_jf() {
-  require_env "ARTIFACTORY_URL" "$ARTIFACTORY_URL" || return 1
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
+
+  if [ -z "$ARTIFACTORY_URL" ]; then
+    ARTIFACTORY_URL="https://blackboard.jfrog.io/"
+  fi
 
   echo "Configure JFrog server"
   CI=true jf config add default --url "$ARTIFACTORY_URL" --user "$ARTIFACTORY_USERNAME" --access-token "$ARTIFACTORY_TOKEN" || return 1
@@ -95,7 +98,7 @@ config_jf() {
 }
 
 setup_jfrog() {
-  if [ "$ARTIFACTORY_SETUP_JFROG" == "false" ]; then
+  if [ "$ARTIFACTORY_SETUP_JFROG" != "true" ]; then
     echo "Skipping jf setup because ARTIFACTORY_SETUP_JFROG=$ARTIFACTORY_SETUP_JFROG"
     return 0
   fi

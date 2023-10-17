@@ -33,8 +33,6 @@ jobs:
         env:
           ARTIFACTORY_USERNAME: test_username
           ARTIFACTORY_TOKEN: test_token
-          ARTIFACTORY_PYPI_INDEX: https://example.com/test_pypi_index
-          ARTIFACTORY_NPM_REGISTRY: https://example.com/test_npm_registry/
 
       - name: Test .netrc exists
         run: test -f ~/.netrc && cat ~/.netrc
@@ -51,9 +49,14 @@ jobs:
       - name: Test settings.xml exists
         run: test -f ~/.m2/settings.xml && cat ~/.m2/settings.xml
 
+      - name: Test GOPROXY is set
+        run: test -n "$GOPROXY" && echo "$GOPROXY"
+
       - name: Test Setup JFrog
         shell: bash
         run: ./setup_jfrog.sh
+        env:
+          ARTIFACTORY_SETUP_JFROG: true
 
   cd:
     needs: [test, action]
