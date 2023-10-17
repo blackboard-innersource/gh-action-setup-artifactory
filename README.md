@@ -9,7 +9,7 @@ Configures package managers to authenticate to Artifactory.
 Every configuration option gets set via environment variables to help improve security and
 to allow usage in other CI/CD systems.
 
-Example for configuring all - `pip`, `npm/yarn1` and `yarn2+`:
+Example for configuring all - `pip`, `npm/yarn1`, `mvn` and `yarn2+`:
 
 ```yaml
       - name: Setup Artifactory
@@ -29,6 +29,7 @@ Example for configuring only `pip`:
         env:
           ARTIFACTORY_SETUP_NPM: false
           ARTIFACTORY_YARN_SETUP: false
+          ARTIFACTORY_SETUP_MVN: false
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
           ARTIFACTORY_PYPI_INDEX: ${{ secrets.ARTIFACTORY_PYPI_INDEX }}
@@ -42,6 +43,7 @@ Example for configuring only `npm/yarn1`:
         env:
           ARTIFACTORY_SETUP_PIP: false
           ARTIFACTORY_YARN_SETUP: false
+          ARTIFACTORY_SETUP_MVN: false
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
           ARTIFACTORY_NPM_REGISTRY: ${{ secrets.ARTIFACTORY_NPM_REGISTRY }}
@@ -55,6 +57,32 @@ Example for configuring only `yarn2+`:
         env:
           ARTIFACTORY_SETUP_PIP: false
           ARTIFACTORY_SETUP_NPM: false
+          ARTIFACTORY_SETUP_MVN: false
+          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+```
+
+Example for configuring only `yarn2+`:
+
+```yaml
+      - name: Setup Artifactory
+        uses: blackboard-innersource/gh-action-setup-artifactory@v2
+        env:
+          ARTIFACTORY_SETUP_PIP: false
+          ARTIFACTORY_SETUP_NPM: false
+          ARTIFACTORY_SETUP_MVN: false
+          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+```
+
+Example for configuring only `mvn`:
+```yaml
+      - name: Setup Artifactory
+        uses: blackboard-innersource/gh-action-setup-artifactory@v2
+        env:
+          ARTIFACTORY_SETUP_PIP: false
+          ARTIFACTORY_SETUP_NPM: false
+          ARTIFACTORY_YARN_SETUP: false
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 ```
@@ -69,6 +97,7 @@ for JFrog CLI:
           ARTIFACTORY_SETUP_PIP: false
           ARTIFACTORY_SETUP_NPM: false
           ARTIFACTORY_YARN_SETUP: false
+          ARTIFACTORY_SETUP_MVN: false
           ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
@@ -102,6 +131,7 @@ git clone --quiet --depth 1 --branch v2 https://github.com/blackboard-innersourc
 ./gh-action-setup-artifactory/setup_pip.sh
 ./gh-action-setup-artifactory/setup_npm.sh
 ./gh-action-setup-artifactory/setup_yarn.sh
+./gh-action-setup-artifactory/setup_mvn.sh
 ```
 
 ## Developing

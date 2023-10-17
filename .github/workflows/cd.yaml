@@ -48,6 +48,9 @@ jobs:
       - name: Test .yarnrc.yml exists
         run: test -f ~/.yarnrc.yml && cat ~/.yarnrc.yml
 
+      - name: Test settings.xml exists
+        run: test -f ~/.m2/settings.xml && cat ~/.m2/settings.xml
+
       - name: Test Setup JFrog
         shell: bash
         run: ./setup_jfrog.sh
