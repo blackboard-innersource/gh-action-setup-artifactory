@@ -147,8 +147,8 @@ setup_jfrog() {
   fi
 
   # Allow for install only and no config
-  if [ -z "$ARTIFACTORY_URL" ]; then
-    echo "Skipping configuring jf because ARTIFACTORY_URL env var is empty"
+  if [ "$ARTIFACTORY_JFROG_TEST" == "true" ]; then
+    echo "Skipping configuring jf because ARTIFACTORY_JFROG_TEST=$ARTIFACTORY_JFROG_TEST"
     return 0
   fi
 

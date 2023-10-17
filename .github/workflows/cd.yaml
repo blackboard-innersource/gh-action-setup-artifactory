@@ -57,6 +57,7 @@ jobs:
         run: ./setup_jfrog.sh
         env:
           ARTIFACTORY_SETUP_JFROG: true
+          ARTIFACTORY_JFROG_TEST: true
 
   cd:
     needs: [test, action]
