@@ -49,9 +49,6 @@ jobs:
       - name: Test settings.xml exists
         run: test -f ~/.m2/settings.xml && cat ~/.m2/settings.xml
 
-      - name: Test GOPROXY is set
-        run: test -n "$GOPROXY" && echo "$GOPROXY"
-
       - name: Test Setup JFrog
         shell: bash
         run: ./setup_jfrog.sh

@@ -9,7 +9,7 @@ Configures package managers to authenticate to Artifactory.
 Every configuration option gets set via environment variables to help improve security and
 to allow usage in other CI/CD systems.
 
-Example for configuring `pip`, `npm`, `yarn`, `mvn` and `go`:
+Example for configuring `pip`, `npm`, `yarn` and `mvn`:
 
 ```yaml
       - name: Setup Artifactory
@@ -31,7 +31,6 @@ Additional environment variables supported by this action:
 | `ARTIFACTORY_SETUP_NPM`    | Set to `false` to not setup `npm` and `yarn@v1` |
 | `ARTIFACTORY_SETUP_YARN`   | Set to `false` to not setup `yarn@v2`           |
 | `ARTIFACTORY_SETUP_MVN`    | Set to `false` to not setup `nvm`               |
-| `ARTIFACTORY_SETUP_GO`     | Set to `false` to not setup `go`                |
 | `ARTIFACTORY_SETUP_JFROG`  | Set to `true` to setup `jf` (JFrog CLI)         |
 | `ARTIFACTORY_PYPI_INDEX`   | Set to override PyPi index URL                  |
 | `ARTIFACTORY_NPM_REGISTRY` | Set to override NPM registry URL                |
