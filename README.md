@@ -31,14 +31,20 @@ Additional environment variables supported by this action:
 | `ARTIFACTORY_SETUP_NPM`    | Set to `false` to not setup `npm` and `yarn@v1` |
 | `ARTIFACTORY_SETUP_YARN`   | Set to `false` to not setup `yarn@v2`           |
 | `ARTIFACTORY_SETUP_MVN`    | Set to `false` to not setup `nvm`               |
-| `ARTIFACTORY_SETUP_JFROG`  | Set to `true` to setup `jf` (JFrog CLI)         |
+| `ARTIFACTORY_SETUP_JFROG`  | Set to `true` to setup `jf` (JFrog CLI)*        |
 | `ARTIFACTORY_PYPI_INDEX`   | Set to override PyPi index URL                  |
 | `ARTIFACTORY_NPM_REGISTRY` | Set to override NPM registry URL                |
-| `ARTIFACTORY_NPM_SCOPES`   | CSV of NPM scopes*                              |
+| `ARTIFACTORY_NPM_SCOPES`   | CSV of NPM scopes**                             |
 
-&ast; `ARTIFACTORY_NPM_SCOPES` adds a scope to the `npm`/`yarn@v1` credential setup. Set
-multiple scopes with: `"@scope1,@scope2"` This option **is ignored** everywhere except for
-in GitHub actions. **Generally, never use this variable!**
+&ast; The `ARTIFACTORY_SETUP_JFROG=true` only applies when using the `entry.sh` which is
+called when using GitHub Actions. When calling `setup_jfrog.sh` directly, you do not need
+to set this env var to `true`. You can also set `ARTIFACTORY_SETUP_JFROG=false` to always
+prevent JFrog CLI from being installed. Default behavior for this is different because
+most of the time it isn't needed, and it takes a while to download and configure.
+
+&ast;&ast; `ARTIFACTORY_NPM_SCOPES` adds a scope to the `npm`/`yarn@v1` credential setup.
+Set multiple scopes with: `"@scope1,@scope2"` This option **is ignored** everywhere except
+for in GitHub actions. **Generally, never use this variable!**
 
 ## Usage: Other
 

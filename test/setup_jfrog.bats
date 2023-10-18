@@ -12,7 +12,6 @@ function teardown {
 
 # shellcheck disable=SC2034
 @test "setup_jfrog can download linux amd64" {
-  ARTIFACTORY_SETUP_JFROG="true"
   ARTIFACTORY_JFROG_TEST="true"
 
   get_os() { echo "linux"; }
@@ -34,7 +33,6 @@ function teardown {
 
 # shellcheck disable=SC2034
 @test "setup_jfrog can download linux arm64" {
-  ARTIFACTORY_SETUP_JFROG="true"
   ARTIFACTORY_JFROG_TEST="true"
 
   get_os() { echo "linux"; }
@@ -59,18 +57,6 @@ function teardown {
   run get_checksum "not_real"
   assert_failure
   assert_output "No checksum defined for not_real"
-}
-
-# shellcheck disable=SC2034
-@test "setup_jfrog is disabled by default" {
-  ARTIFACTORY_JFROG_TEST="true"
-
-  config_jf() { return 1; }
-  export -f config_jf
-
-  run setup_jfrog
-  assert_success
-  assert_output "Skipping jf setup because ARTIFACTORY_SETUP_JFROG="
 }
 
 # shellcheck disable=SC2034
