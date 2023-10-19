@@ -51,8 +51,8 @@ get_arch() {
 get_checksum() {
     local cs
     case "$1" in
-        linux_amd64) cs="c12909c25ca96047ac2fced0383964d906e011c0569dbc1215e59e326c57754e";;
-        linux_arm64) cs="f5b3e4e252d2f7b89b51610d334b810b744a2fcae2d324d4217cbb0f119c21c4";;
+        linux_amd64) cs="2cb2fa070f2b377d37cd491b7e41e51560b9d808d7fcf04a80449078f2110a68";;
+        linux_arm64) cs="6b4440fc6924f979c748efc36f39ae3853003e3242dee8b9ef60a2e40ec86e2f";;
         *) >&2 echo "No checksum defined for ${1}"; return 1;;
     esac
 
@@ -83,9 +83,12 @@ install_binary() {
 }
 
 config_jf() {
-  require_env "ARTIFACTORY_URL" "$ARTIFACTORY_URL" || return 1
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
+
+  if [ -z "$ARTIFACTORY_URL" ]; then
+    ARTIFACTORY_URL="https://blackboard.jfrog.io/"
+  fi
 
   echo "Configure JFrog server"
   CI=true jf config add default --url "$ARTIFACTORY_URL" --user "$ARTIFACTORY_USERNAME" --access-token "$ARTIFACTORY_TOKEN" || return 1
@@ -102,8 +105,9 @@ setup_jfrog() {
 
   local version majorVersion os arch checksum url
 
+  # Find versions here https://github.com/jfrog/jfrog-cli/releases
   # If you update versions, then run tests to update checksums
-  version="2.39.0"
+  version="2.50.1"
   majorVersion="v2-jf"
   os=$(get_os)
   arch=$(get_arch)
@@ -143,8 +147,8 @@ setup_jfrog() {
   fi
 
   # Allow for install only and no config
-  if [ -z "$ARTIFACTORY_URL" ]; then
-    echo "Skipping configuring jf because ARTIFACTORY_URL env var is empty"
+  if [ "$ARTIFACTORY_JFROG_TEST" == "true" ]; then
+    echo "Skipping configuring jf because ARTIFACTORY_JFROG_TEST=$ARTIFACTORY_JFROG_TEST"
     return 0
   fi
 

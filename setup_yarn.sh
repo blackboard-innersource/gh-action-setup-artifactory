@@ -15,8 +15,13 @@ require_env() {
 }
 
 setup_yarn() {
+  # Legacy variable, was named differently from all our other ones
   if [ "$ARTIFACTORY_YARN_SETUP" == "false" ]; then
     echo "Skipping yarn setup because ARTIFACTORY_YARN_SETUP=$ARTIFACTORY_YARN_SETUP"
+    return 0
+  fi
+  if [ "$ARTIFACTORY_SETUP_YARN" == "false" ]; then
+    echo "Skipping yarn setup because ARTIFACTORY_SETUP_YARN=$ARTIFACTORY_SETUP_YARN"
     return 0
   fi
 

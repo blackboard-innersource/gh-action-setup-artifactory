@@ -9,7 +9,7 @@ Configures package managers to authenticate to Artifactory.
 Every configuration option gets set via environment variables to help improve security and
 to allow usage in other CI/CD systems.
 
-Example for configuring all - `pip`, `npm/yarn1`, `mvn` and `yarn2+`:
+Example for configuring `pip`, `npm`, `yarn` and `mvn`:
 
 ```yaml
       - name: Setup Artifactory
@@ -17,97 +17,34 @@ Example for configuring all - `pip`, `npm/yarn1`, `mvn` and `yarn2+`:
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-          ARTIFACTORY_PYPI_INDEX: ${{ secrets.ARTIFACTORY_PYPI_INDEX }}
-          ARTIFACTORY_NPM_REGISTRY: ${{ secrets.ARTIFACTORY_NPM_REGISTRY }}
 ```
 
-Example for configuring only `pip`:
+General recommendation is to pull all artifacts from Artifactory because higher security
+accreditations require that you pull packages from a repository that is under your
+control.
 
-```yaml
-      - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v2
-        env:
-          ARTIFACTORY_SETUP_NPM: false
-          ARTIFACTORY_YARN_SETUP: false
-          ARTIFACTORY_SETUP_MVN: false
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-          ARTIFACTORY_PYPI_INDEX: ${{ secrets.ARTIFACTORY_PYPI_INDEX }}
-```
+Additional environment variables supported by this action:
 
-Example for configuring only `npm/yarn1`:
+| Name                       | How to use                                      |
+|----------------------------|-------------------------------------------------|
+| `ARTIFACTORY_SETUP_PIP`    | Set to `false` to not setup `pip`               |
+| `ARTIFACTORY_SETUP_NPM`    | Set to `false` to not setup `npm` and `yarn@v1` |
+| `ARTIFACTORY_SETUP_YARN`   | Set to `false` to not setup `yarn@v2`           |
+| `ARTIFACTORY_SETUP_MVN`    | Set to `false` to not setup `nvm`               |
+| `ARTIFACTORY_SETUP_JFROG`  | Set to `true` to setup `jf` (JFrog CLI)*        |
+| `ARTIFACTORY_PYPI_INDEX`   | Set to override PyPi index URL                  |
+| `ARTIFACTORY_NPM_REGISTRY` | Set to override NPM registry URL                |
+| `ARTIFACTORY_NPM_SCOPES`   | CSV of NPM scopes**                             |
 
-```yaml
-      - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v2
-        env:
-          ARTIFACTORY_SETUP_PIP: false
-          ARTIFACTORY_YARN_SETUP: false
-          ARTIFACTORY_SETUP_MVN: false
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-          ARTIFACTORY_NPM_REGISTRY: ${{ secrets.ARTIFACTORY_NPM_REGISTRY }}
-```
+&ast; The `ARTIFACTORY_SETUP_JFROG=true` only applies when using the `entry.sh` which is
+called when using GitHub Actions. When calling `setup_jfrog.sh` directly, you do not need
+to set this env var to `true`. You can also set `ARTIFACTORY_SETUP_JFROG=false` to always
+prevent JFrog CLI from being installed. Default behavior for this is different because
+most of the time it isn't needed, and it takes a while to download and configure.
 
-Example for configuring only `yarn2+`:
-
-```yaml
-      - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v2
-        env:
-          ARTIFACTORY_SETUP_PIP: false
-          ARTIFACTORY_SETUP_NPM: false
-          ARTIFACTORY_SETUP_MVN: false
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-```
-
-Example for configuring only `yarn2+`:
-
-```yaml
-      - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v2
-        env:
-          ARTIFACTORY_SETUP_PIP: false
-          ARTIFACTORY_SETUP_NPM: false
-          ARTIFACTORY_SETUP_MVN: false
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-```
-
-Example for configuring only `mvn`:
-```yaml
-      - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v2
-        env:
-          ARTIFACTORY_SETUP_PIP: false
-          ARTIFACTORY_SETUP_NPM: false
-          ARTIFACTORY_YARN_SETUP: false
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-```
-
-Example for configuring only JFrog CLI (`jf`). Just add `ARTIFACTORY_URL` to trigger setup
-for JFrog CLI:
-
-```yaml
-      - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v2
-        env:
-          ARTIFACTORY_SETUP_PIP: false
-          ARTIFACTORY_SETUP_NPM: false
-          ARTIFACTORY_YARN_SETUP: false
-          ARTIFACTORY_SETUP_MVN: false
-          ARTIFACTORY_URL: ${{ secrets.ARTIFACTORY_URL }}
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
-```
-
-Additional environment variables:
-
-`ARTIFACTORY_NPM_SCOPES` adds a scope to the NPM/yarn@v1 credential setup. Set multiple
-scopes with: `"@scope1,@scope2"` This option is ignored everywhere except for in GitHub
-actions. **Generally, never use this variable!**
+&ast;&ast; `ARTIFACTORY_NPM_SCOPES` adds a scope to the `npm`/`yarn@v1` credential setup.
+Set multiple scopes with: `"@scope1,@scope2"` This option **is ignored** everywhere except
+for in GitHub actions. **Generally, never use this variable!**
 
 ## Usage: Other
 
@@ -118,10 +55,7 @@ You can invoke the shell scripts directly in non-GitHub workflows.
 export ARTIFACTORY_TOKEN="token"
 # ...etc
 
-# Download this project
-git clone --quiet --depth 1 https://github.com/blackboard-innersource/gh-action-setup-artifactory.git
-
-# Or using a tag
+# Download this project using a tag
 git clone --quiet --depth 1 --branch v2 https://github.com/blackboard-innersource/gh-action-setup-artifactory.git
 
 # Same entry point as the GitHub action 
@@ -132,6 +66,7 @@ git clone --quiet --depth 1 --branch v2 https://github.com/blackboard-innersourc
 ./gh-action-setup-artifactory/setup_npm.sh
 ./gh-action-setup-artifactory/setup_yarn.sh
 ./gh-action-setup-artifactory/setup_mvn.sh
+./gh-action-setup-artifactory/setup_jfrog.sh
 ```
 
 ## Developing

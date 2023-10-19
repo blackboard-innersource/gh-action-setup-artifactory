@@ -31,7 +31,10 @@ setup_npm() {
 
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
-  require_env "ARTIFACTORY_NPM_REGISTRY" "$ARTIFACTORY_NPM_REGISTRY" || return 1
+
+  if [ -z "$ARTIFACTORY_NPM_REGISTRY" ]; then
+    ARTIFACTORY_NPM_REGISTRY="https://blackboard.jfrog.io/artifactory/api/npm/fnds-npm/"
+  fi
 
   local configKey
   local npmrc

@@ -39,6 +39,27 @@ EOF
 }
 
 # shellcheck disable=SC2034
+@test "setup_npm can configure npm without registry URL" {
+  HOME="$TMPDIR"
+  ARTIFACTORY_USERNAME="test_username"
+  ARTIFACTORY_TOKEN="test_token"
+
+  run setup_npm
+  assert_success
+  assert [ -f "$TMPDIR/.npmrc" ]
+
+  run cat "$TMPDIR/.npmrc"
+  assert_success
+  assert_output - <<EOF
+registry=https://blackboard.jfrog.io/artifactory/api/npm/fnds-npm/
+//blackboard.jfrog.io/artifactory/api/npm/fnds-npm/:_password=dGVzdF90b2tlbg==
+//blackboard.jfrog.io/artifactory/api/npm/fnds-npm/:username=test_username
+//blackboard.jfrog.io/artifactory/api/npm/fnds-npm/:always-auth=true
+EOF
+
+}
+
+# shellcheck disable=SC2034
 @test "setup_npm ignores scopes outside of GitHub Actions" {
   HOME="$TMPDIR"
   ARTIFACTORY_USERNAME="test_username"

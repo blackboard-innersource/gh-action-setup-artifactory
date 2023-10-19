@@ -29,10 +29,15 @@ setup_pip() {
 
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
-  require_env "ARTIFACTORY_PYPI_INDEX" "$ARTIFACTORY_PYPI_INDEX" || return 1
 
-  domain=$(echo "$ARTIFACTORY_PYPI_INDEX" | awk -F '[/:]' '{print $4}')
-  require_var "$domain" "Failed to extract domain from ARTIFACTORY_PYPI_INDEX env var" || return 1
+  local domain
+  if [ -n "$ARTIFACTORY_PYPI_INDEX" ]; then
+    domain=$(echo "$ARTIFACTORY_PYPI_INDEX" | awk -F '[/:]' '{print $4}')
+    require_var "$domain" "Failed to extract domain from ARTIFACTORY_PYPI_INDEX env var" || return 1
+  else
+    ARTIFACTORY_PYPI_INDEX="https://blackboard.jfrog.io/artifactory/api/pypi/fnds-pypi/simple"
+    domain="blackboard.jfrog.io"
+  fi
 
   local netrc
   netrc="$HOME/.netrc"
