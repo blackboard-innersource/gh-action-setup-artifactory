@@ -86,6 +86,12 @@ config_jf() {
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
 
+  # Don't waste time warning us of new version
+  export JFROG_CLI_AVOID_NEW_VERSION_WARNING=true
+  if [ -n "$GITHUB_ACTIONS" ]; then
+    echo "JFROG_CLI_AVOID_NEW_VERSION_WARNING=true" >> "$GITHUB_ENV"
+  fi
+
   if [ -z "$ARTIFACTORY_URL" ]; then
     ARTIFACTORY_URL="https://blackboard.jfrog.io/"
   fi
