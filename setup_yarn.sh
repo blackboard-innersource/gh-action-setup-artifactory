@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 require_var() {
   if [ -z "$1" ]; then
     >&2 echo "$2"
@@ -32,7 +30,7 @@ setup_yarn() {
   yarnrc="$HOME/.yarnrc.yml"
   cat > "$yarnrc" << EOF
 npmAlwaysAuth: true
-npmAuthToken: ${ARTIFACTORY_USERNAME}:${ARTIFACTORY_TOKEN}
+npmAuthIdent: "$ARTIFACTORY_USERNAME:$ARTIFACTORY_TOKEN"
 
 EOF
   echo "Wrote to $yarnrc"

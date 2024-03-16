@@ -12,11 +12,11 @@ to allow usage in other CI/CD systems.
 Example for configuring `pip`, `npm`, `yarn` and `mvn`:
 
 ```yaml
-      - name: Setup Artifactory
-        uses: blackboard-innersource/gh-action-setup-artifactory@v2
-        env:
-          ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+- name: Setup Artifactory
+  uses: blackboard-innersource/gh-action-setup-artifactory@v2
+  env:
+    ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+    ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 ```
 
 General recommendation is to pull all artifacts from Artifactory because higher security
@@ -26,23 +26,23 @@ control.
 Additional environment variables supported by this action:
 
 | Name                       | How to use                                      |
-|----------------------------|-------------------------------------------------|
+| -------------------------- | ----------------------------------------------- |
 | `ARTIFACTORY_SETUP_PIP`    | Set to `false` to not setup `pip`               |
 | `ARTIFACTORY_SETUP_NPM`    | Set to `false` to not setup `npm` and `yarn@v1` |
-| `ARTIFACTORY_SETUP_YARN`   | Set to `false` to not setup `yarn@v2`           |
+| `ARTIFACTORY_SETUP_YARN`   | Set to `false` to not setup `yarn@v2+`          |
 | `ARTIFACTORY_SETUP_MVN`    | Set to `false` to not setup `nvm`               |
-| `ARTIFACTORY_SETUP_JFROG`  | Set to `true` to setup `jf` (JFrog CLI)*        |
+| `ARTIFACTORY_SETUP_JFROG`  | Set to `true` to setup `jf` (JFrog CLI)\*       |
 | `ARTIFACTORY_PYPI_INDEX`   | Set to override PyPi index URL                  |
 | `ARTIFACTORY_NPM_REGISTRY` | Set to override NPM registry URL                |
-| `ARTIFACTORY_NPM_SCOPES`   | CSV of NPM scopes**                             |
+| `ARTIFACTORY_NPM_SCOPES`   | CSV of NPM scopes\*\*                           |
 
-&ast; The `ARTIFACTORY_SETUP_JFROG=true` only applies when using the `entry.sh` which is
+\* The `ARTIFACTORY_SETUP_JFROG=true` only applies when using the `entry.sh` which is
 called when using GitHub Actions. When calling `setup_jfrog.sh` directly, you do not need
 to set this env var to `true`. You can also set `ARTIFACTORY_SETUP_JFROG=false` to always
 prevent JFrog CLI from being installed. Default behavior for this is different because
 most of the time it isn't needed, and it takes a while to download and configure.
 
-&ast;&ast; `ARTIFACTORY_NPM_SCOPES` adds a scope to the `npm`/`yarn@v1` credential setup.
+\*\* `ARTIFACTORY_NPM_SCOPES` adds a scope to the `npm`/`yarn@v1` credential setup.
 Set multiple scopes with: `"@scope1,@scope2"` This option **is ignored** everywhere except
 for in GitHub actions. **Generally, never use this variable!**
 
@@ -58,10 +58,10 @@ export ARTIFACTORY_TOKEN="token"
 # Download this project using a tag
 git clone --quiet --depth 1 --branch v2 https://github.com/blackboard-innersource/gh-action-setup-artifactory.git
 
-# Same entry point as the GitHub action 
+# Same entry point as the GitHub action
 ./gh-action-setup-artifactory/entry.sh
 
-# Or you can call specific setup scripts 
+# Or you can call specific setup scripts
 ./gh-action-setup-artifactory/setup_pip.sh
 ./gh-action-setup-artifactory/setup_npm.sh
 ./gh-action-setup-artifactory/setup_yarn.sh
