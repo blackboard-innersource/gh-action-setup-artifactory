@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Unit tests
         run: make
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run action
         uses: ./
@@ -62,19 +62,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
-          go-version: "1.20"
+          go-version: "1.22"
 
       - name: Next tag info
         id: tag
         run: |
-          go install github.com/caarlos0/svu@v1.5.0
+          go install github.com/caarlos0/svu@v1.12.0
           next=$(svu next --pattern 'v*.*.*')
           echo "current: $(svu current)"
           echo "next:    $next"

@@ -30,7 +30,7 @@ function teardown {
   assert_success
   assert_output - <<EOF
 npmAlwaysAuth: true
-npmAuthToken: test_username:test_token
+npmAuthIdent: "test_username:test_token"
 EOF
 
 }
