@@ -9,7 +9,7 @@ Configures package managers to authenticate to Artifactory.
 Every configuration option gets set via environment variables to help improve security and
 to allow usage in other CI/CD systems.
 
-Example for configuring `pip`, `npm`, `yarn` and `mvn`:
+Example for configuring `pip`, `npm`, `yarn`, `sbt` and `mvn`:
 
 ```yaml
 - name: Setup Artifactory
@@ -26,15 +26,19 @@ control.
 Additional environment variables supported by this action:
 
 | Name                       | How to use                                      |
-| -------------------------- | ----------------------------------------------- |
+| -------------------------- |-------------------------------------------------|
 | `ARTIFACTORY_SETUP_PIP`    | Set to `false` to not setup `pip`               |
 | `ARTIFACTORY_SETUP_NPM`    | Set to `false` to not setup `npm` and `yarn@v1` |
 | `ARTIFACTORY_SETUP_YARN`   | Set to `false` to not setup `yarn@v2+`          |
 | `ARTIFACTORY_SETUP_MVN`    | Set to `false` to not setup `nvm`               |
+| `ARTIFACTORY_SETUP_SBT`    | Set to `false` to not setup `sbt`               |
+| `SBT_CREDENTIALS`          | The value must be "$HOME/.sbt/.credentials"     |
 | `ARTIFACTORY_SETUP_JFROG`  | Set to `true` to setup `jf` (JFrog CLI)\*       |
 | `ARTIFACTORY_PYPI_INDEX`   | Set to override PyPi index URL                  |
 | `ARTIFACTORY_NPM_REGISTRY` | Set to override NPM registry URL                |
 | `ARTIFACTORY_NPM_SCOPES`   | CSV of NPM scopes\*\*                           |
+
+
 
 \* The `ARTIFACTORY_SETUP_JFROG=true` only applies when using the `entry.sh` which is
 called when using GitHub Actions. When calling `setup_jfrog.sh` directly, you do not need
@@ -66,6 +70,7 @@ git clone --quiet --depth 1 --branch v2 https://github.com/blackboard-innersourc
 ./gh-action-setup-artifactory/setup_npm.sh
 ./gh-action-setup-artifactory/setup_yarn.sh
 ./gh-action-setup-artifactory/setup_mvn.sh
+./gh-action-setup-artifactory/setup_sbt.sh
 ./gh-action-setup-artifactory/setup_jfrog.sh
 ```
 
