@@ -4,8 +4,6 @@ This script setups your environment for Scala SBT connected to JFrog. It creates
 - $HOME/.sbt/.credentials
 - $HOME/.sbt/repositories
 - $HOME/.sbt/1.0/plugins/credentials.sbt
-
-Besides the two basic variables (ARTIFACTORY_USERNAME, ARTIFACTORY_TOKEN), it requires SBT env variable SBT_CREDENTIALS.
 "
 
 require_var() {
@@ -28,16 +26,6 @@ setup_sbt() {
 
   require_env "ARTIFACTORY_USERNAME" "r" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
-  require_env "SBT_CREDENTIALS" "$SBT_CREDENTIALS" || return 1
-
-  local sbt_credentials_expected
-  sbt_credentials_expected="$HOME/.sbt/.credentials"
-
-  if [[ "$SBT_CREDENTIALS" != "$sbt_credentials_expected" ]]
-    then
-      echo "Env variable SBT_CREDENTIALS expected value is $sbt_credentials_expected but got $SBT_CREDENTIALS"
-      exit 1
-  fi
 
   local dot_credentials
   local sbt_path

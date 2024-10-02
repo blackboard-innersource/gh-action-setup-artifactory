@@ -32,7 +32,6 @@ Additional environment variables supported by this action:
 | `ARTIFACTORY_SETUP_YARN`   | Set to `false` to not setup `yarn@v2+`            |
 | `ARTIFACTORY_SETUP_MVN`    | Set to `false` to not setup `nvm`                 |
 | `ARTIFACTORY_SETUP_SBT`    | Set to `false` to not setup `sbt`                 |
-| `SBT_CREDENTIALS`          | The value must be "$HOME/.sbt/.credentials"       |
 | `ARTIFACTORY_SETUP_JFROG`  | Set to `true` to setup `jf` (JFrog CLI)\*         |
 | `ARTIFACTORY_PYPI_INDEX`   | Set to override PyPi index URL                    |
 | `ARTIFACTORY_NPM_REGISTRY` | Set to override NPM registry URL                  |

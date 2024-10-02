@@ -22,7 +22,6 @@ function teardown {
   HOME="$TMPDIR"
   ARTIFACTORY_USERNAME="test_username"
   ARTIFACTORY_TOKEN="test_token"
-  SBT_CREDENTIALS="$HOME/.sbt/.credentials"
 
   run setup_sbt
   assert_success
@@ -69,23 +68,11 @@ EOF
 # shellcheck disable=SC2034
 @test "setup_sbt fails when missing env var" {
   HOME="$TMPDIR"
-  ARTIFACTORY_USERNAME="test_username"
-  ARTIFACTORY_TOKEN="test_token"
   run setup_sbt
   assert_failure
   assert [ ! -f "$TMPDIR/.sbt/credentials" ]
   assert [ ! -f "$TMPDIR/.sbt/repositories" ]
   assert [ ! -f "$TMPDIR/.sbt/1.0/plugins/credentials.sbt" ]
-  assert_output "Missing env var 'SBT_CREDENTIALS'"
+  assert_output "Missing env var 'ARTIFACTORY_TOKEN'"
 }
 
-# shellcheck disable=SC2034
-@test "setup_sbt fails when env var SBT_CREDENTIALS value is not expected" {
-  HOME="$TMPDIR"
-  ARTIFACTORY_USERNAME="test_username"
-  ARTIFACTORY_TOKEN="test_token"
-  SBT_CREDENTIALS="$HOME/this/is/not/expected/path/.credentials"
-  run setup_sbt
-  assert_failure
-  assert_output --partial "Env variable SBT_CREDENTIALS expected value is"
-}
