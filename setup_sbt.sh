@@ -66,7 +66,7 @@ EOF
   fi
 
   local credentials_sbt
-  credentials_sbt="${sbt_path}/1.0/plugins/credentials.sbt"
+  credentials_sbt="${sbt_plugins}/credentials.sbt"
 
   cat > "$credentials_sbt" << EOF
 credentials += Credentials(Path.userHome / ".sbt" / ".credentials")
