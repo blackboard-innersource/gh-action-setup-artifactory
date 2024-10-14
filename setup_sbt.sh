@@ -33,6 +33,7 @@ setup_sbt() {
   dot_credentials="${sbt_path}/.credentials"
 
   if [[ ! -d "${sbt_path}" ]];then
+    echo "Creating directory $sbt_path"
     mkdir "${sbt_path}"
   fi
 
@@ -56,6 +57,13 @@ my-maven-proxy-releases: https://blackboard.jfrog.io/artifactory/fnds-sbt/
 EOF
 
   echo "Wrote to $repositories"
+
+  local sbt_plugins
+  sbt_plugins="${sbt_path}/1.0/plugins"
+  if [[ ! -d "${sbt_plugins}" ]];then
+      echo "Creating directory $sbt_plugins"
+      mkdir -p "${sbt_plugins}"
+  fi
 
   local credentials_sbt
   credentials_sbt="${sbt_path}/1.0/plugins/credentials.sbt"

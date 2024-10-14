@@ -8,7 +8,6 @@ TMPDIR=""
 
 function setup {
   TMPDIR=$(mktemp -d)
-  mkdir -p $TMPDIR/.sbt/1.0/plugins
 }
 
 function teardown {
