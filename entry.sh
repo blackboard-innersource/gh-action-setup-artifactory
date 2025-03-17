@@ -21,15 +21,15 @@ time_operation() {
 . "$dir/setup_sbt.sh"
 
 # Execute and time each setup
-time_operation setup_pip
-time_operation setup_npm
-time_operation setup_yarn
-time_operation setup_mvn
-time_operation setup_sbt
+time setup_pip
+time setup_npm
+time setup_yarn
+time setup_mvn
+time setup_sbt
 
 if [ "$ARTIFACTORY_SETUP_JFROG" == "true" ]; then
     . "$dir/setup_jfrog.sh"
-    time_operation setup_jfrog
+    time setup_jfrog
 else
     echo "Skipping jf setup because ARTIFACTORY_SETUP_JFROG!=true"
 fi
