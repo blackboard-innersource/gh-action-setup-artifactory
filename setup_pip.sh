@@ -51,8 +51,8 @@ EOF
 
   echo "Wrote to $netrc"
 
-  "$pipCmd" config set global.index-url "$ARTIFACTORY_PYPI_INDEX"
-
+  time "$pipCmd" config set global.index-url "$ARTIFACTORY_PYPI_INDEX"
+  echo "Set pip index-url"
   return 0
 }
 
