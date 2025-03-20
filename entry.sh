@@ -3,33 +3,15 @@
 set -e
 
 dir=$(dirname "${BASH_SOURCE[0]}")
+"$dir/setup_pip.sh"
+"$dir/setup_npm.sh"
+"$dir/setup_yarn.sh"
+"$dir/setup_mvn.sh"
+"$dir/setup_sbt.sh"
 
-# Helper function to time operations
-time_operation() {
-    local start=$(date +%s.%N)
-    "$@"
-    local end=$(date +%s.%N)
-    local duration=$(echo "$end - $start" | bc)
-    printf "%-20s took %.2f seconds\n" "$1" "$duration"
-}
-
-# Source all setup scripts
-. "$dir/setup_pip.sh"
-. "$dir/setup_npm.sh"
-. "$dir/setup_yarn.sh"
-. "$dir/setup_mvn.sh"
-. "$dir/setup_sbt.sh"
-
-# Execute and time each setup
-time setup_pip
-time setup_npm
-time setup_yarn
-time setup_mvn
-time setup_sbt
-
+# In general, folks do not need to setup JFrog CLI and it's slow to setup - so only do so on request
 if [ "$ARTIFACTORY_SETUP_JFROG" == "true" ]; then
-    . "$dir/setup_jfrog.sh"
-    time setup_jfrog
+  "$dir/setup_jfrog.sh"
 else
-    echo "Skipping jf setup because ARTIFACTORY_SETUP_JFROG!=true"
+  echo "Skipping jf setup because ARTIFACTORY_SETUP_JFROG!=true"
 fi
