@@ -42,7 +42,9 @@ EOF
 
   echo "Wrote to $netrc"
 
-  mkdir -p "$HOME/.config/pip"
+  if [ ! -d "$HOME/.config/pip" ]; then
+    mkdir -p "$HOME/.config/pip"
+  fi
   cat > "$HOME/.config/pip/pip.conf" << EOF
 [global]
 index-url = $ARTIFACTORY_PYPI_INDEX
@@ -50,7 +52,9 @@ EOF
 
   echo "Wrote to $HOME/.config/pip/pip.conf"
 
-  mkdir -p "$HOME/.config/uv"
+  if [ ! -d "$HOME/.config/uv" ]; then
+    mkdir -p "$HOME/.config/uv"
+  fi
   cat > "$HOME/.config/uv/uv.toml" << EOF
 [[index]]
 url = "$ARTIFACTORY_PYPI_INDEX"
