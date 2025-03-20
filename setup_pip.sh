@@ -18,15 +18,6 @@ setup_pip() {
     return 0
   fi
 
-  pipCmd=""
-  if command -v pip3 &> /dev/null; then
-    pipCmd="pip3"
-  elif command -v pip &> /dev/null; then
-    pipCmd="pip"
-  fi
-
-  require_var "$pipCmd" "Cannot find pip executable, tried pip3 and pip" || return 1
-
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
 
@@ -51,8 +42,13 @@ EOF
 
   echo "Wrote to $netrc"
 
-  time "$pipCmd" config set global.index-url "$ARTIFACTORY_PYPI_INDEX"
-  echo "Set pip index-url"
+  if [ -n "$GITHUB_ENV" ]; then
+    echo "PIP_INDEX_URL=$ARTIFACTORY_PYPI_INDEX" >> "$GITHUB_ENV"
+  else
+    export PIP_INDEX_URL="$ARTIFACTORY_PYPI_INDEX"
+  fi
+  echo "Set env PIP_INDEX_URL"
+
   return 0
 }
 
