@@ -42,14 +42,22 @@ EOF
 
   echo "Wrote to $netrc"
 
-  if [ -n "$GITHUB_ENV" ]; then
-    echo "PIP_INDEX_URL=$ARTIFACTORY_PYPI_INDEX" >> "$GITHUB_ENV"
-    echo "UV_DEFAULT_INDEX=$ARTIFACTORY_PYPI_INDEX" >> "$GITHUB_ENV"
-  else
-    export PIP_INDEX_URL="$ARTIFACTORY_PYPI_INDEX"
-    export UV_DEFAULT_INDEX="$ARTIFACTORY_PYPI_INDEX"
-  fi
-  echo "Set env PIP_INDEX_URL and UV_DEFAULT_INDEX"
+  mkdir -p "$HOME/.config/pip"
+  cat > "$HOME/.config/pip/pip.conf" << EOF
+[global]
+index-url = $ARTIFACTORY_PYPI_INDEX
+EOF
+
+  echo "Wrote to $HOME/.config/pip/pip.conf"
+
+  mkdir -p "$HOME/.config/uv"
+  cat > "$HOME/.config/uv/uv.toml" << EOF
+[[index]]
+url = "$ARTIFACTORY_PYPI_INDEX"
+default = true
+EOF
+
+  echo "Wrote to $HOME/.config/uv/uv.toml"
 
   return 0
 }
