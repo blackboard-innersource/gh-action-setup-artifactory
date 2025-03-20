@@ -42,26 +42,32 @@ EOF
 
   echo "Wrote to $netrc"
 
-  if [ ! -d "$HOME/.config/pip" ]; then
-    mkdir -p "$HOME/.config/pip"
+  local pip_conf_dir
+  pip_conf_dir="${XDG_CONFIG_HOME:-$HOME/.config}/pip"
+
+  if [ ! -d "$pip_conf_dir" ]; then
+    mkdir -p "$pip_conf_dir"
   fi
-  cat > "$HOME/.config/pip/pip.conf" << EOF
+  cat > "$pip_conf_dir/pip.conf" << EOF
 [global]
 index-url = $ARTIFACTORY_PYPI_INDEX
 EOF
 
-  echo "Wrote to $HOME/.config/pip/pip.conf"
+  echo "Wrote to $pip_conf_dir/pip.conf"
 
-  if [ ! -d "$HOME/.config/uv" ]; then
-    mkdir -p "$HOME/.config/uv"
+  local uv_dir
+  uv_dir="${XDG_CONFIG_HOME:-$HOME/.config}/uv"
+
+  if [ ! -d "$uv_dir" ]; then
+    mkdir -p "$uv_dir"
   fi
-  cat > "$HOME/.config/uv/uv.toml" << EOF
+  cat > "$uv_dir/uv.toml" << EOF
 [[index]]
 url = "$ARTIFACTORY_PYPI_INDEX"
 default = true
 EOF
 
-  echo "Wrote to $HOME/.config/uv/uv.toml"
+  echo "Wrote to $uv_dir/uv.toml"
 
   return 0
 }
