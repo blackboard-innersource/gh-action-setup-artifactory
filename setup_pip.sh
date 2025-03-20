@@ -44,10 +44,12 @@ EOF
 
   if [ -n "$GITHUB_ENV" ]; then
     echo "PIP_INDEX_URL=$ARTIFACTORY_PYPI_INDEX" >> "$GITHUB_ENV"
+    echo "UV_DEFAULT_INDEX=$ARTIFACTORY_PYPI_INDEX" >> "$GITHUB_ENV"
   else
     export PIP_INDEX_URL="$ARTIFACTORY_PYPI_INDEX"
+    export UV_DEFAULT_INDEX="$ARTIFACTORY_PYPI_INDEX"
   fi
-  echo "Set env PIP_INDEX_URL"
+  echo "Set env PIP_INDEX_URL and UV_DEFAULT_INDEX"
 
   return 0
 }
