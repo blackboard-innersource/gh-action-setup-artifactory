@@ -68,16 +68,16 @@ EOF
   run cat "$TMPDIR/.config/pip/pip.conf"
   assert_success
   assert_output - <<EOF
-[[index]]
-url = "https://blackboard.jfrog.io/artifactory/api/pypi/fnds-pypi/simple"
-default = true
+[global]
+index-url = https://blackboard.jfrog.io/artifactory/api/pypi/fnds-pypi/simple
 EOF
 
   run cat "$TMPDIR/.config/uv/uv.toml"
   assert_success
   assert_output - <<EOF
-[global]
-index-url = https://example.com/test_index
+[[index]]
+url = "https://blackboard.jfrog.io/artifactory/api/pypi/fnds-pypi/simple"
+default = true
 EOF
 
   run cat "$TMPDIR/.netrc"
