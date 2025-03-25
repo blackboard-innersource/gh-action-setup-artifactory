@@ -40,6 +40,9 @@ jobs:
       - name: Test pip.conf exists
         run: test -f ~/.config/pip/pip.conf && cat ~/.config/pip/pip.conf
 
+      - name: Test uv.toml exists
+        run: test -f ~/.config/uv/uv.toml && cat ~/.config/uv/uv.toml
+
       - name: Test .npmrc exists
         run: test -f ~/.npmrc && cat ~/.npmrc
 

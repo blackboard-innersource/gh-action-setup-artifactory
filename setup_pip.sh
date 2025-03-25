@@ -18,15 +18,6 @@ setup_pip() {
     return 0
   fi
 
-  pipCmd=""
-  if command -v pip3 &> /dev/null; then
-    pipCmd="pip3"
-  elif command -v pip &> /dev/null; then
-    pipCmd="pip"
-  fi
-
-  require_var "$pipCmd" "Cannot find pip executable, tried pip3 and pip" || return 1
-
   require_env "ARTIFACTORY_USERNAME" "$ARTIFACTORY_USERNAME" || return 1
   require_env "ARTIFACTORY_TOKEN" "$ARTIFACTORY_TOKEN" || return 1
 
@@ -51,7 +42,32 @@ EOF
 
   echo "Wrote to $netrc"
 
-  "$pipCmd" config set global.index-url "$ARTIFACTORY_PYPI_INDEX"
+  local pip_conf_dir
+  pip_conf_dir="${XDG_CONFIG_HOME:-$HOME/.config}/pip"
+
+  if [ ! -d "$pip_conf_dir" ]; then
+    mkdir -p "$pip_conf_dir"
+  fi
+  cat > "$pip_conf_dir/pip.conf" << EOF
+[global]
+index-url = $ARTIFACTORY_PYPI_INDEX
+EOF
+
+  echo "Wrote to $pip_conf_dir/pip.conf"
+
+  local uv_dir
+  uv_dir="${XDG_CONFIG_HOME:-$HOME/.config}/uv"
+
+  if [ ! -d "$uv_dir" ]; then
+    mkdir -p "$uv_dir"
+  fi
+  cat > "$uv_dir/uv.toml" << EOF
+[[index]]
+url = "$ARTIFACTORY_PYPI_INDEX"
+default = true
+EOF
+
+  echo "Wrote to $uv_dir/uv.toml"
 
   return 0
 }

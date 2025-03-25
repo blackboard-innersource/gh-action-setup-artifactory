@@ -36,6 +36,14 @@ function teardown {
 index-url = https://example.com/test_index
 EOF
 
+  run cat "$TMPDIR/.config/uv/uv.toml"
+  assert_success
+  assert_output - <<EOF
+[[index]]
+url = "https://example.com/test_index"
+default = true
+EOF
+
   run cat "$TMPDIR/.netrc"
   assert_success
   assert_output - <<EOF
@@ -64,6 +72,14 @@ EOF
 index-url = https://blackboard.jfrog.io/artifactory/api/pypi/fnds-pypi/simple
 EOF
 
+  run cat "$TMPDIR/.config/uv/uv.toml"
+  assert_success
+  assert_output - <<EOF
+[[index]]
+url = "https://blackboard.jfrog.io/artifactory/api/pypi/fnds-pypi/simple"
+default = true
+EOF
+
   run cat "$TMPDIR/.netrc"
   assert_success
   assert_output - <<EOF
@@ -82,6 +98,7 @@ EOF
   run setup_pip
   assert_success
   assert [ ! -f "$TMPDIR/.config/pip/pip.conf" ]
+  assert [ ! -f "$TMPDIR/.config/uv/uv.toml" ]
   assert [ ! -f "$TMPDIR/.netrc" ]
   assert_output "Skipping pip setup because ARTIFACTORY_SETUP_PIP=false"
 }
@@ -94,6 +111,7 @@ EOF
   run setup_pip
   assert_failure
   assert [ ! -f "$TMPDIR/.config/pip/pip.conf" ]
+  assert [ ! -f "$TMPDIR/.config/uv/uv.toml" ]
   assert [ ! -f "$TMPDIR/.netrc" ]
   assert_output "Missing env var 'ARTIFACTORY_USERNAME'"
 }
