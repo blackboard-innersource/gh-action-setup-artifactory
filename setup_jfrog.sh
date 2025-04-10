@@ -72,12 +72,9 @@ install_binary() {
         >&2 echo "Failed to install ${1} to ${dest}"
         return 1
       fi
+      rm -f "$1" # Install copies, not move
       echo "Installed ${1} to ${dest}"
       jf --version || return 1
-
-      echo "REMOVE TEST"
-      ls
-      echo "REMOVE TEST"
       return 0
     fi
   done
