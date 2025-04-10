@@ -63,7 +63,7 @@ get_checksum() {
 install_binary() {
   local dest dests
 
-  dests=("/usr/local/bin" "/usr/bin" "/opt/bin")
+  dests=("$HOME/bin" "/usr/local/bin" "/usr/bin" "/opt/bin")
 
   for dest in "${dests[@]}"; do
     # This if is testing if our destination is in the $PATH (start, middle, end)
@@ -113,7 +113,7 @@ setup_jfrog() {
 
   # Find versions here https://github.com/jfrog/jfrog-cli/releases
   # If you update versions, then run tests to update checksums
-  version="2.50.1"
+  version="2.74.1"
   majorVersion="v2-jf"
   os=$(get_os)
   arch=$(get_arch)
