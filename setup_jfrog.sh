@@ -74,6 +74,10 @@ install_binary() {
       fi
       echo "Installed ${1} to ${dest}"
       jf --version || return 1
+
+      echo "REMOVE TEST"
+      ls
+      echo "REMOVE TEST"
       return 0
     fi
   done
