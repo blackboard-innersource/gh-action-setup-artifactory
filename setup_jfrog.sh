@@ -51,8 +51,8 @@ get_arch() {
 get_checksum() {
     local cs
     case "$1" in
-        linux_amd64) cs="2cb2fa070f2b377d37cd491b7e41e51560b9d808d7fcf04a80449078f2110a68";;
-        linux_arm64) cs="6b4440fc6924f979c748efc36f39ae3853003e3242dee8b9ef60a2e40ec86e2f";;
+        linux_amd64) cs="9d01e42bfdbb4408abc99e56f68ae388c6eff84b5d84045a916acd2956da5409";;
+        linux_arm64) cs="14e77c1d3c55f3ac9b81633950d7312469e5b616d6b69da5c3397868ac199947";;
         *) >&2 echo "No checksum defined for ${1}"; return 1;;
     esac
 
@@ -140,10 +140,10 @@ setup_jfrog() {
   fi
 
   echo "Verifying checksum of jf"
-  if ! echo "${checksum}" | sha256sum -c; then
+  if ! echo "${checksum}" | shasum -a 256 -c; then
     >&2 echo "Failed to verify checksum."
     >&2 echo "Expected: ${checksum}"
-    >&2 echo "Got:      $(sha256sum jf)"
+    >&2 echo "Got:      $(shasum -a 256 jf)"
     return 1
   fi
 
