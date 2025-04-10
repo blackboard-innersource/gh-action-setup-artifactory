@@ -141,10 +141,10 @@ setup_jfrog() {
   fi
 
   echo "Verifying checksum of jf"
-  if ! echo "${checksum}" | shasum -a 256 -c; then
+  if ! echo "${checksum}" | sha256sum -c; then
     >&2 echo "Failed to verify checksum."
     >&2 echo "Expected: ${checksum}"
-    >&2 echo "Got:      $(shasum -a 256 jf)"
+    >&2 echo "Got:      $(sha256sum jf)"
     return 1
   fi
 
