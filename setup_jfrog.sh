@@ -69,6 +69,7 @@ verify_file() {
         local tool="$1"
         local computed="$2"
         if [ "$computed" = "$expected_hash" ]; then
+            >&2 echo "${file}: OK"
             return 0
         fi
         >&2 echo "Failed to verify checksum using $tool:"
