@@ -56,8 +56,51 @@ get_checksum() {
         *) >&2 echo "No checksum defined for ${1}"; return 1;;
     esac
 
-    echo "$cs  jf"
+    echo "$cs"
     return 0
+}
+
+verify_file() {
+    local expected_hash="$1"
+    local file="$2"
+    local computed_hash
+
+    # Try openssl (available on most systems including macOS)
+    if command -v openssl >/dev/null 2>&1; then
+        computed_hash=$(openssl dgst -sha256 "$file" | cut -d' ' -f2)
+        if [ "$computed_hash" = "$expected_hash" ]; then
+            return 0
+        fi
+        >&2 echo "Failed to verify checksum using openssl:"
+        >&2 echo "Expected: $expected_hash"
+        >&2 echo "Got:      $computed_hash"
+        return 1
+    fi
+
+    if command -v shasum >/dev/null 2>&1; then
+        computed_hash=$(shasum -a 256 "$file" | cut -d' ' -f1)
+        if [ "$computed_hash" = "$expected_hash" ]; then
+            return 0
+        fi
+        >&2 echo "Failed to verify checksum using shasum:"
+        >&2 echo "Expected: $expected_hash"
+        >&2 echo "Got:      $computed_hash"
+        return 1
+    fi
+
+    if command -v sha256sum >/dev/null 2>&1; then
+        computed_hash=$(sha256sum "$file" | cut -d' ' -f1)
+        if [ "$computed_hash" = "$expected_hash" ]; then
+            return 0
+        fi
+        >&2 echo "Failed to verify checksum using sha256sum:"
+        >&2 echo "Expected: $expected_hash"
+        >&2 echo "Got:      $computed_hash"
+        return 1
+    fi
+
+    >&2 echo "No suitable hash verification tool found (tried openssl, sha256sum, and shasum)"
+    return 1
 }
 
 install_binary() {
@@ -141,10 +184,7 @@ setup_jfrog() {
   fi
 
   echo "Verifying checksum of jf"
-  if ! echo "${checksum}" | sha256sum -c; then
-    >&2 echo "Failed to verify checksum."
-    >&2 echo "Expected: ${checksum}"
-    >&2 echo "Got:      $(sha256sum jf)"
+  if ! verify_file "$checksum" "jf"; then
     return 1
   fi
 
