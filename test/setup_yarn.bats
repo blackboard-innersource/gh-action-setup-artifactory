@@ -101,6 +101,7 @@ EOF
 # shellcheck disable=SC2034
 @test "setup_yarn fails when missing env var" {
   HOME="$TMPDIR"
+  unset ARTIFACTORY_TOKEN
 
   run setup_yarn
   assert_failure

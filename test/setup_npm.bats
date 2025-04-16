@@ -101,6 +101,7 @@ EOF
 # shellcheck disable=SC2034
 @test "setup_npm fails when missing env var" {
   HOME="$TMPDIR"
+  unset ARTIFACTORY_USERNAME
 
   run setup_npm
   assert_failure

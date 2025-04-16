@@ -62,6 +62,7 @@ EOF
 @test "setup_pip fails when missing env var" {
   HOME="$TMPDIR"
   XDG_CONFIG_HOME="$TMPDIR/.config"
+  unset ARTIFACTORY_USERNAME
 
   run setup_pip
   assert_failure
