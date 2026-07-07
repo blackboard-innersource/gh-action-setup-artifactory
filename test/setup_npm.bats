@@ -33,7 +33,6 @@ function teardown {
 registry=https://example.com/test_registry/
 //example.com/test_registry/:_password=dGVzdF90b2tlbg==
 //example.com/test_registry/:username=test_username
-//example.com/test_registry/:always-auth=true
 EOF
 
 }
@@ -54,7 +53,6 @@ EOF
 registry=https://blackboard.jfrog.io/artifactory/api/npm/fnds-npm/
 //blackboard.jfrog.io/artifactory/api/npm/fnds-npm/:_password=dGVzdF90b2tlbg==
 //blackboard.jfrog.io/artifactory/api/npm/fnds-npm/:username=test_username
-//blackboard.jfrog.io/artifactory/api/npm/fnds-npm/:always-auth=true
 EOF
 
 }
@@ -78,7 +76,6 @@ EOF
 registry=https://example.com/test_registry/
 //example.com/test_registry/:_password=dGVzdF90b2tlbg==
 //example.com/test_registry/:username=test_username
-//example.com/test_registry/:always-auth=true
 EOF
 
 }
@@ -103,7 +100,6 @@ EOF
 @wakka:registry=https://example.com/test_registry/
 //example.com/test_registry/:_password=dGVzdF90b2tlbg==
 //example.com/test_registry/:username=test_username
-//example.com/test_registry/:always-auth=true
 EOF
 
 }
