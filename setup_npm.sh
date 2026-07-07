@@ -62,12 +62,24 @@ setup_npm() {
   configKey=${ARTIFACTORY_NPM_REGISTRY#"https://"}
   npmrc="$HOME/.npmrc"
 
+  # always-auth was removed in npm 7: it's ignored there and warns ("Unknown user
+  # config always-auth"), with the warning promising a hard failure in a future major.
+  # But npm <= 6 (e.g. Node 14 projects) still needs it to send credentials on tarball
+  # downloads, so only emit it for those. When npm can't be detected, keep it to be safe.
+  local alwaysAuth=""
+  local npmMajor=""
+  if command -v npm >/dev/null 2>&1; then
+    npmMajor=$(npm --version 2>/dev/null | cut -d. -f1)
+  fi
+  if ! [[ "$npmMajor" =~ ^[0-9]+$ ]] || [ "$npmMajor" -le 6 ]; then
+    alwaysAuth="//${configKey}:always-auth=true"
+  fi
+
   cat > "$npmrc" << EOF
 $registry
 //${configKey}:_password=$(encode "$ARTIFACTORY_TOKEN")
 //${configKey}:username=$ARTIFACTORY_USERNAME
-//${configKey}:always-auth=true
-
+$alwaysAuth
 EOF
 
   echo "Wrote to $npmrc"
