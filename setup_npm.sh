@@ -66,12 +66,18 @@ setup_npm() {
   # config always-auth"), with the warning promising a hard failure in a future major.
   # But npm <= 6 (e.g. Node 14 projects) still needs it to send credentials on tarball
   # downloads, so only emit it for those. When npm can't be detected, keep it to be safe.
+  # Yarn v1 (Yarn Classic) also relies on always-auth, so emit it when a project pins a
+  # yarn 1.x release via `.yarn/releases/yarn-1.*.*.cjs`.
   local alwaysAuth=""
   local npmMajor=""
   if command -v npm >/dev/null 2>&1; then
     npmMajor=$(npm --version 2>/dev/null | cut -d. -f1)
   fi
-  if ! [[ "$npmMajor" =~ ^[0-9]+$ ]] || [ "$npmMajor" -le 6 ]; then
+  local yarnV1=false
+  if compgen -G ".yarn/releases/yarn-1.*.*.cjs" >/dev/null 2>&1; then
+    yarnV1=true
+  fi
+  if ! [[ "$npmMajor" =~ ^[0-9]+$ ]] || [ "$npmMajor" -le 6 ] || [ "$yarnV1" = true ]; then
     alwaysAuth="//${configKey}:always-auth=true"
   fi
 
